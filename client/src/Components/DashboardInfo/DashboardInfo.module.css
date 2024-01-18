@@ -1,0 +1,131 @@
+* {
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+.dashboardInfo {
+  width: 85%;
+  height: 100%;
+  background-color: #ededed;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  overflow: auto;
+}
+
+.upper_part {
+  display: flex;
+  /* justify-content: center; */
+  gap: 3rem;
+  height: fit-content;
+  width: 100%;
+}
+
+.box_1,
+.box_2,
+.box_3 {
+  font-family: "Poppins";
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background: #fff;
+  padding: 1rem;
+  width: 15rem;
+  display: flex;
+  align-items: center;
+}
+
+.box_1 {
+  color: #ff5d01;
+}
+
+.box_2 {
+  color: #60b84b;
+}
+
+.box_3 {
+  color: #5076ff;
+}
+
+.title {
+  font-family: "Poppins";
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.lower_part {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.heading {
+  color: #474444;
+  font-family: "Poppins";
+  font-size: 1.75rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: auto;
+}
+
+.trending_quiz {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.quiz {
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 1rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  width: 12.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.row_1 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.impressions {
+  display: flex;
+  gap: 0.2rem;
+  padding-top: 0.2rem;
+  color: #ff5d01;
+  font-family: "Poppins";
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.quiz_name {
+  color: #474444;
+  font-family: "Poppins";
+  font-size: 1.1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.row_2 {
+  color: #60b84b;
+  font-family: 'Poppins';
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
