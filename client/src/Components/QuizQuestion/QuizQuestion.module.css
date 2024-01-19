@@ -1,0 +1,52 @@
+.quiz_form {
+  width: 40rem;
+  height: 30rem;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 2rem 3rem 2rem 3rem;
+}
+
+.row_1 {
+  color: #9f9f9f;
+  font-family: "Poppins";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  justify-content: space-between;
+}
+
+.question{
+    display: flex;
+    gap: 0.5rem;
+}
+
+.question_list{
+    display: flex;
+    gap: 0.5rem;
+}
+
+
+.add_btn{
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.number {
+  border: 2px solid transparent;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem;
+  width: 3rem;
+}
+
+.criteria{
+    display: flex;
+    align-items: center;
+}

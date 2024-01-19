@@ -18,7 +18,7 @@ function Dashboard() {
         optionType: "",
         options: [{ option1: "" }, { option2: "" }],
         timer: "",
-      },
+      }
     ],
   });
 
@@ -69,11 +69,11 @@ function Dashboard() {
         {clicked === 0 ? <DashboardInfo /> : <Analytics />}
       </div>
       {popup && (
-        <div className={styles.wrapper} onClick={() => setPopup(!popup)}>
+        <div className={styles.wrapper}>
           {!showQuestion ? (
             <div
               className={styles.popup}
-              onClick={(event) => event.stopPropagation()}
+              // onClick={(event) => event.stopPropagation()}
             >
               <div className={styles.upper_box}>
                 <input
