@@ -35,6 +35,12 @@ function Dashboard() {
     });
   };
 
+  const handleContinue=()=>{
+    if(quiz.name && quiz.quizType){
+      setShowQuestion(!showQuestion)
+    } 
+  }
+
   return (
     <>
       <div className={styles.dashboard}>
@@ -118,14 +124,14 @@ function Dashboard() {
                 </button>
                 <button
                   className={styles.continue}
-                  onClick={() => setShowQuestion(!showQuestion)}
+                  onClick={handleContinue}
                 >
                   Continue
                 </button>
               </div>
             </div>
           ) : (
-            <QuizQuestion quiz={quiz} setQuiz={setQuiz} />
+            <QuizQuestion quiz={quiz} setQuiz={setQuiz} showQuestion={showQuestion} setShowQuestion={setShowQuestion} />
           )}
         </div>
       )}
