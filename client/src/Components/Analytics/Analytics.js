@@ -17,6 +17,7 @@ function Analytics() {
        </div>
        {/* <div className={styles.container}> */}
         <table className={styles.analysis_table}>
+          <thead>
           <tr className={styles.table_heading}>
             <th>S.No</th>
             <th>Quiz Name</th>
@@ -25,8 +26,10 @@ function Analytics() {
             <th></th>
             <th></th>
           </tr>
+          </thead>
+          <tbody>
           {quizs.map((quiz,index)=>(
-          <tr className={`${styles.quiz_analysis} ${(index+1)%2===0 && `${styles.even_row}`}`}>
+          <tr key={index} className={`${styles.quiz_analysis} ${(index+1)%2===0 && `${styles.even_row}`}`}>
             <td>{quiz}</td>
             <td>First Quiz</td>
             <td>16/01/2024</td>
@@ -36,10 +39,11 @@ function Analytics() {
               <img src={image2} alt="delete"/>
               <img src={image3} alt="share"/>
             </td>
-            <td className>
+            <td>
               <Link to="/quizAnalysis" className={styles.link_text}>Question Wise Analysis</Link>
             </td>
           </tr>))}
+          </tbody>
         </table>
        {/* </div> */}
       </div>
