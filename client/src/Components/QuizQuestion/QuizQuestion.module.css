@@ -46,7 +46,13 @@
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.15);
   padding: 0.5rem;
   width: 3rem;
+  cursor: pointer;
 }
+
+.selected_question{
+  outline: 1px solid black;
+}
+
 
 .criteria {
   display: flex;
@@ -170,3 +176,4 @@
   display: flex;
   justify-content: flex-end;
 }
+

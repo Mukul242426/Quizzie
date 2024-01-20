@@ -14,7 +14,7 @@ function Dashboard() {
     quizType: "",
     questions: [
       {
-        question: "",
+        questionName: "",
         optionType: "",
         options: ["",""],
         timer: "",

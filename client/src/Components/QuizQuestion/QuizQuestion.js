@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./QuizQuestion.module.css";
 
 function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
   const [optionType, setOptionType] = useState("Text");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
+  const [selectedQuestion, setSelectedQuestion] = useState(-1);
+
+  useEffect(() => {
+    console.log(currentIndex);
+  }, [currentIndex]);
 
   const handleUpdate = () => {
     const newQuestion = {
-      question: "",
+      questionName: "",
       optionType: "",
       options: ["", ""],
       timer: "",
@@ -35,13 +40,32 @@ function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
     });
   };
 
+  const handleInput=(e)=>{
+    setQuiz({
+      ...quiz,
+      questions:quiz.questions.map((question,index)=>
+      index===currentIndex? {...question,questionName:e.target.value}:question
+      )
+    })
+  }
+
   return (
     <div className={styles.quiz_form}>
       <div className={styles.row_1}>
         <div className={styles.question}>
           {quiz.questions.map((question, index) => (
             <div key={index} className={styles.question_list}>
-              <div className={styles.number}>{index + 1}</div>
+              <div
+                className={`${styles.number} ${
+                  index === selectedQuestion && `${styles.selected_question}`
+                }`}
+                onClick={() => {
+                  setSelectedQuestion(index)
+                  setCurrentIndex(index)
+                }}
+              >
+                {index + 1}
+              </div>
 
               {index + 1 === quiz.questions.length && index + 1 !== 5 && (
                 <div className={styles.add_btn} onClick={handleUpdate}>
@@ -59,6 +83,8 @@ function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
           type="text"
           className={styles.input_field}
           placeholder="Poll Question"
+          value={quiz.questions[currentIndex].questionName}
+          onChange={handleInput}
         />
       </div>
       <div className={styles.row_3}>
@@ -81,26 +107,32 @@ function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
           {quiz.questions[currentIndex].options.map((option, index) => (
             <div key={index} className={styles.quiz_part_1}>
               <div className={styles.option}>
-                <input
-                  type="radio"
-                  className={styles.radio_btn}
-                  checked={selectedOption === index + 1}
-                  onChange={() => setSelectedOption(index + 1)}
-                />
+                {quiz.quizType !== "Poll" && (
+                  <input
+                    type="radio"
+                    className={styles.radio_btn}
+                    checked={selectedOption === index + 1}
+                    onChange={() => setSelectedOption(index + 1)}
+                  />
+                )}
                 <input
                   type="text"
-                  placeholder={optionType==='Text & Image Url'?'Text':optionType}
+                  placeholder={
+                    optionType === "Text & Image Url" ? "Text" : optionType
+                  }
                   className={`${styles.option_input} ${
                     selectedOption === index + 1 && `${styles.change_bg}`
                   }`}
                 />
-                {optionType==='Text & Image Url' && <input
-                  type="text"
-                  placeholder="Image Url"
-                  className={`${styles.option_input} ${
-                    selectedOption === index + 1 && `${styles.change_bg}`
-                  }`}
-                />}
+                {optionType === "Text & Image Url" && (
+                  <input
+                    type="text"
+                    placeholder="Image Url"
+                    className={`${styles.option_input} ${
+                      selectedOption === index + 1 && `${styles.change_bg}`
+                    }`}
+                  />
+                )}
               </div>
               {index + 1 === quiz.questions[currentIndex].options.length &&
                 quiz.questions[currentIndex].options.length < 4 && (
