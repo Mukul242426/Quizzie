@@ -16,10 +16,10 @@ function Dashboard() {
       {
         question: "",
         optionType: "",
-        options: [{ option1: "" }, { option2: "" }],
+        options: ["",""],
         timer: "",
       }
-    ],
+    ]
   });
 
   useEffect(() => {

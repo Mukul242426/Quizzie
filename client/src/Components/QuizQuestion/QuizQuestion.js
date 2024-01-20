@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import styles from "./QuizQuestion.module.css";
 
 function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
-  const [selectedOption, setSelectedOption] = useState("Text");
+  const [optionType, setOptionType] = useState("Text");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(0);
 
   const handleUpdate = () => {
     const newQuestion = {
       question: "",
       optionType: "",
-      options: [{ option1: "" }, { option2: "" }],
+      options: ["", ""],
       timer: "",
     };
 
@@ -19,7 +21,18 @@ function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
   };
 
   const handleChange = (e) => {
-    setSelectedOption(e.target.value);
+    setOptionType(e.target.value);
+  };
+
+  const handleNew = () => {
+    setQuiz({
+      ...quiz,
+      questions: quiz.questions.map((question, index) =>
+        index === currentIndex
+          ? { ...question, options: [...question.options, ""] }
+          : question
+      ),
+    });
   };
 
   return (
@@ -56,7 +69,7 @@ function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
               type="radio"
               className={styles.radio_btn}
               value={value}
-              checked={selectedOption === value}
+              checked={optionType === value}
               onChange={handleChange}
             />
             <div>{value}</div>
@@ -64,11 +77,49 @@ function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
         ))}
       </div>
       <div className={styles.options_container}>
-        <div className={styles.col_1}></div>
+        <div className={styles.col_1}>
+          {quiz.questions[currentIndex].options.map((option, index) => (
+            <div key={index} className={styles.quiz_part_1}>
+              <div className={styles.option}>
+                <input
+                  type="radio"
+                  className={styles.radio_btn}
+                  checked={selectedOption === index + 1}
+                  onChange={() => setSelectedOption(index + 1)}
+                />
+                <input
+                  type="text"
+                  placeholder={optionType==='Text & Image Url'?'Text':optionType}
+                  className={`${styles.option_input} ${
+                    selectedOption === index + 1 && `${styles.change_bg}`
+                  }`}
+                />
+                {optionType==='Text & Image Url' && <input
+                  type="text"
+                  placeholder="Image Url"
+                  className={`${styles.option_input} ${
+                    selectedOption === index + 1 && `${styles.change_bg}`
+                  }`}
+                />}
+              </div>
+              {index + 1 === quiz.questions[currentIndex].options.length &&
+                quiz.questions[currentIndex].options.length < 4 && (
+                  <div className={styles.second_btn}>
+                    <button className={styles.add_option} onClick={handleNew}>
+                      Add Option
+                    </button>
+                  </div>
+                )}
+            </div>
+          ))}
+        </div>
         <div className={styles.col_2}></div>
       </div>
       <div className={styles.button_box}>
-        <button className={styles.cancel} onClick={() => setShowQuestion(!showQuestion)}>
+        <button
+          className={styles.cancel}
+          onClick={() => setShowQuestion(!showQuestion)}
+        >
           Cancel
         </button>
         <button className={styles.continue}>Create Quiz</button>
