@@ -1,5 +1,5 @@
 .quiz_form {
-  width: 40rem;
+  width: 45rem;
   /* height: 30rem; */
   background-color: #fff;
   border-radius: 10px;
@@ -162,6 +162,7 @@
 
 .change_bg {
   background-color: #60b84b;
+  color: white;
 }
 
 .change_bg::placeholder {
@@ -223,4 +224,13 @@
 .add_bg {
   background-color: #d60000;
   color: #fff;
+}
+
+.remove_question{
+  position: absolute;
+  border: none;
+  background-color: transparent;
+  margin-top: -0.1rem;
+  margin-left: 2.4rem;
+  cursor: pointer;
 }

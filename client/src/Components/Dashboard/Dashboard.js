@@ -12,12 +12,13 @@ function Dashboard() {
   const [quiz, setQuiz] = useState({
     name: "",
     quizType: "",
+    optionType: "Text",
     timer: "",
     questions: [
       {
         questionName: "",
-        optionType: "",
-        options: ["", ""]
+        options: ["", ""],
+        correctOption:-1
       },
     ],
   });

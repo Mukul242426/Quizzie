@@ -4,20 +4,20 @@ import image1 from "../../assets/material-symbols_delete.png";
 
 function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   const [optionType, setOptionType] = useState("Text");
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(-1);
 
   useEffect(() => {
-    console.log("currentIndex is",currentIndex);
-  }, [currentIndex]);
+    console.log("currentQuestionIndex is", currentQuestionIndex);
+    console.log("quiz is", quiz);
+  }, [currentQuestionIndex, quiz]);
 
   const addQuestion = () => {
     const newQuestion = {
       questionName: "",
       optionType: "",
       options: ["", ""],
-      timer: "",
     };
 
     setQuiz({
@@ -34,7 +34,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
     setQuiz({
       ...quiz,
       questions: quiz.questions.map((question, index) =>
-        index === currentIndex
+        index === currentQuestionIndex
           ? { ...question, options: [...question.options, ""] }
           : question
       ),
@@ -42,12 +42,29 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   };
 
   const handleInput = (e) => {
-    const {name,value}=e.target;
+    const { name, value } = e.target;
     setQuiz({
       ...quiz,
       questions: quiz.questions.map((question, index) =>
-        index === currentIndex
+        index === currentQuestionIndex
           ? { ...question, [name]: value }
+          : question
+      ),
+    });
+  };
+
+  const handleOptionInput = (e, optionIndex) => {
+    console.log(e.target.value);
+    setQuiz({
+      ...quiz,
+      questions: quiz.questions.map((question, index) =>
+        index === currentQuestionIndex
+          ? {
+              ...question,
+              options: question.options.map((option, i) =>
+                i === optionIndex ? e.target.value : option
+              ),
+            }
           : question
       ),
     });
@@ -65,11 +82,13 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                 }`}
                 onClick={() => {
                   setSelectedQuestion(index);
-                  setCurrentIndex(index);
+                  setCurrentQuestionIndex(index);
                 }}
               >
                 {index + 1}
               </div>
+              {index+1>1 && (<button className={styles.remove_question}>X</button>)}
+
 
               {index + 1 === quiz.questions.length && index + 1 !== 5 && (
                 <div className={styles.add_btn} onClick={addQuestion}>
@@ -87,7 +106,8 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
           type="text"
           className={styles.input_field}
           placeholder="Poll Question"
-          value={quiz.questions[currentIndex].questionName}
+          name="questionName"
+          value={quiz.questions[currentQuestionIndex].questionName}
           onChange={handleInput}
         />
       </div>
@@ -98,7 +118,6 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
             <input
               type="radio"
               className={styles.radio_btn}
-              name="questionName"
               value={value}
               checked={optionType === value}
               onChange={handleChange}
@@ -109,7 +128,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
       </div>
       <div className={styles.options_container}>
         <div className={styles.col_1}>
-          {quiz.questions[currentIndex].options.map((option, index) => (
+          {quiz.questions[currentQuestionIndex].options.map((option, index) => (
             <div key={index} className={styles.quiz_part_1}>
               <div className={styles.option}>
                 {quiz.quizType !== "Poll" && (
@@ -125,6 +144,8 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                   placeholder={
                     optionType === "Text & Image Url" ? "Text" : optionType
                   }
+                  value={quiz.questions[currentQuestionIndex].options[index]}
+                  onChange={(e) => handleOptionInput(e, index)}
                   className={`${styles.option_input} ${
                     selectedOption === index + 1 && `${styles.change_bg}`
                   }`}
@@ -144,13 +165,13 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                       src={image1}
                       className={styles.delete_btn}
                       alt="delete_btn"
-                      onClick={()=>{}}
                     />
                   </div>
                 )}
               </div>
-              {index + 1 === quiz.questions[currentIndex].options.length &&
-                quiz.questions[currentIndex].options.length < 4 && (
+              {index + 1 ===
+                quiz.questions[currentQuestionIndex].options.length &&
+                quiz.questions[currentQuestionIndex].options.length < 4 && (
                   <div className={styles.second_btn}>
                     <button className={styles.add_option} onClick={addOption}>
                       Add Option
@@ -169,8 +190,8 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                 className={`${styles.timer_duration} ${
                   quiz.timer === time && `${styles.add_bg}`
                 }`}
-                onClick={()=>{
-                  setQuiz({...quiz,timer:time})
+                onClick={() => {
+                  setQuiz({ ...quiz, timer: time });
                 }}
               >
                 {time}
