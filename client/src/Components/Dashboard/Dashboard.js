@@ -7,8 +7,8 @@ import QuizQuestion from "../QuizQuestion/QuizQuestion";
 
 function Dashboard() {
   const [clicked, setClicked] = useState(0);
-  const [popup, setPopup] = useState(false);
-  const [showQuestion, setShowQuestion] = useState(false);
+  const [showWrapper, setShowWrapper] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [quiz, setQuiz] = useState({
     name: "",
     quizType: "",
@@ -16,16 +16,18 @@ function Dashboard() {
       {
         questionName: "",
         optionType: "",
-        options: ["",""],
+        options: ["", ""],
         timer: "",
-      }
-    ]
+      },
+    ],
   });
 
   useEffect(() => {
-    console.log(clicked);
-    console.log(quiz);
-  }, [clicked, quiz]);
+    // console.log(clicked);
+    // console.log(quiz);
+    console.log("Wrapper is",showWrapper)
+    console.log("popup is", showPopup);
+  }, [showWrapper,showPopup]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,11 +37,11 @@ function Dashboard() {
     });
   };
 
-  const handleContinue=()=>{
-    if(quiz.name && quiz.quizType){
-      setShowQuestion(!showQuestion)
-    } 
-  }
+  const handleContinue = () => {
+    if (quiz.name && quiz.quizType) {
+      setShowPopup(!showPopup)
+    }
+  };
 
   return (
     <>
@@ -57,7 +59,8 @@ function Dashboard() {
                   if (index !== 2) {
                     setClicked(index);
                   } else {
-                    setPopup(!popup);
+                    setShowWrapper(!showWrapper);
+                    setShowPopup(!showPopup);
                   }
                 }}
               >
@@ -74,9 +77,9 @@ function Dashboard() {
         </div>
         {clicked === 0 ? <DashboardInfo /> : <Analytics />}
       </div>
-      {popup && (
+      {showWrapper && (
         <div className={styles.wrapper}>
-          {!showQuestion ? (
+          {showPopup ? (
             <div
               className={styles.popup}
               // onClick={(event) => event.stopPropagation()}
@@ -118,20 +121,25 @@ function Dashboard() {
               <div className={styles.lower_box}>
                 <button
                   className={styles.cancel}
-                  onClick={() => setPopup(!popup)}
+                  onClick={() => {
+                    setShowWrapper(!showWrapper)
+                    setShowPopup(!showPopup);
+                  }}
                 >
                   Cancel
                 </button>
-                <button
-                  className={styles.continue}
-                  onClick={handleContinue}
-                >
+                <button className={styles.continue} onClick={handleContinue}>
                   Continue
                 </button>
               </div>
             </div>
           ) : (
-            <QuizQuestion quiz={quiz} setQuiz={setQuiz} showQuestion={showQuestion} setShowQuestion={setShowQuestion} />
+            <QuizQuestion
+              quiz={quiz}
+              setQuiz={setQuiz}
+              setShowWrapper={setShowWrapper}
+              setShowPopup={setShowPopup}
+              />
           )}
         </div>
       )}

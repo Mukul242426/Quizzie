@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./QuizQuestion.module.css";
 
-function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
+function QuizQuestion({ quiz, setQuiz,setShowWrapper,setShowPopup}) {
   const [optionType, setOptionType] = useState("Text");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
@@ -150,7 +150,10 @@ function QuizQuestion({ quiz, setQuiz, showQuestion, setShowQuestion }) {
       <div className={styles.button_box}>
         <button
           className={styles.cancel}
-          onClick={() => setShowQuestion(!showQuestion)}
+          onClick={() =>{
+             setShowWrapper(false)
+             setShowPopup(false)
+          }}
         >
           Cancel
         </button>
