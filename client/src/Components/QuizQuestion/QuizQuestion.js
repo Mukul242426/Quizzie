@@ -3,7 +3,6 @@ import styles from "./QuizQuestion.module.css";
 import image1 from "../../assets/material-symbols_delete.png";
 
 function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
-  const [optionType, setOptionType] = useState("Text");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(-1);
@@ -16,8 +15,8 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   const addQuestion = () => {
     const newQuestion = {
       questionName: "",
-      optionType: "",
       options: ["", ""],
+      correctOption:-1
     };
 
     setQuiz({
@@ -27,7 +26,10 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   };
 
   const handleChange = (e) => {
-    setOptionType(e.target.value);
+    setQuiz({
+      ...quiz,
+      optionType:e.target.value
+    })
   };
 
   const addOption = () => {
@@ -119,7 +121,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
               type="radio"
               className={styles.radio_btn}
               value={value}
-              checked={optionType === value}
+              checked={quiz.optionType === value}
               onChange={handleChange}
             />
             <div>{value}</div>
@@ -142,7 +144,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                 <input
                   type="text"
                   placeholder={
-                    optionType === "Text & Image Url" ? "Text" : optionType
+                    quiz.optionType === "Text & Image Url" ? "Text" : quiz.optionType
                   }
                   value={quiz.questions[currentQuestionIndex].options[index]}
                   onChange={(e) => handleOptionInput(e, index)}
@@ -150,7 +152,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                     selectedOption === index + 1 && `${styles.change_bg}`
                   }`}
                 />
-                {optionType === "Text & Image Url" && (
+                {quiz.optionType === "Text & Image Url" && (
                   <input
                     type="text"
                     placeholder="Image Url"
