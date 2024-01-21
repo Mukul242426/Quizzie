@@ -17,7 +17,7 @@ function Dashboard() {
     questions: [
       {
         questionName: "",
-        options: ["", ""],
+        options: [{text:"",imageUrl:""},{text:"",imageUrl:""}],
         correctOption:-1
       },
     ],

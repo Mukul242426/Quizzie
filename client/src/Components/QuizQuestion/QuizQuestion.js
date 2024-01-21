@@ -4,32 +4,42 @@ import image1 from "../../assets/material-symbols_delete.png";
 
 function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(0);
-  const [selectedQuestion, setSelectedQuestion] = useState(-1);
+  const [selectedQuestion, setSelectedQuestion] = useState(0);
+
+  // useEffect(() => {
+  //   console.log("currentQuestionIndex is", currentQuestionIndex);
+  //   console.log("quiz is", quiz);
+  // }, [currentQuestionIndex, quiz]);
 
   useEffect(() => {
-    console.log("currentQuestionIndex is", currentQuestionIndex);
-    console.log("quiz is", quiz);
-  }, [currentQuestionIndex, quiz]);
+    console.log("selected question index is",selectedQuestion);
+    console.log("current question index is",currentQuestionIndex)
+  }, [selectedQuestion,currentQuestionIndex]);
+  
 
-  const addQuestion = () => {
+  const addQuestion = (questionIndex) => {
     const newQuestion = {
       questionName: "",
-      options: ["", ""],
-      correctOption:-1
+      options: [
+        { text: "", imageUrl: "" },
+        { text: "", imageUrl: "" },
+      ],
+      correctOption: -1,
     };
 
     setQuiz({
       ...quiz,
       questions: [...quiz.questions, newQuestion],
     });
+    setCurrentQuestionIndex(questionIndex+1)
+    setSelectedQuestion(questionIndex+1)
   };
 
   const handleChange = (e) => {
     setQuiz({
       ...quiz,
-      optionType:e.target.value
-    })
+      optionType: e.target.value,
+    });
   };
 
   const addOption = () => {
@@ -37,13 +47,16 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
       ...quiz,
       questions: quiz.questions.map((question, index) =>
         index === currentQuestionIndex
-          ? { ...question, options: [...question.options, ""] }
+          ? {
+              ...question,
+              options: [...question.options, { text: "", imageUrl: "" }],
+            }
           : question
       ),
     });
   };
 
-  const handleInput = (e) => {
+  const handleQuestionInput = (e) => {
     const { name, value } = e.target;
     setQuiz({
       ...quiz,
@@ -56,7 +69,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   };
 
   const handleOptionInput = (e, optionIndex) => {
-    console.log(e.target.value);
+    const { name, value } = e.target;
     setQuiz({
       ...quiz,
       questions: quiz.questions.map((question, index) =>
@@ -64,13 +77,22 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
           ? {
               ...question,
               options: question.options.map((option, i) =>
-                i === optionIndex ? e.target.value : option
+                i === optionIndex ? { ...option, [name]: value } : option
               ),
             }
           : question
       ),
     });
   };
+
+  const deleteQuestion=(questionIndex)=>{
+    setQuiz({
+      ...quiz,
+      questions:quiz.questions.filter((question,index)=>index!==questionIndex)
+    })
+    setCurrentQuestionIndex(questionIndex-1)
+    setSelectedQuestion(questionIndex-1)
+  }
 
   return (
     <div className={styles.quiz_form}>
@@ -89,11 +111,12 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
               >
                 {index + 1}
               </div>
-              {index+1>1 && (<button className={styles.remove_question}>X</button>)}
-
+              {index + 1 > 1 && (
+                <button className={styles.remove_question} onClick={()=>deleteQuestion(index)}>X</button>
+              )}
 
               {index + 1 === quiz.questions.length && index + 1 !== 5 && (
-                <div className={styles.add_btn} onClick={addQuestion}>
+                <div className={styles.add_btn} onClick={()=>addQuestion(index)}>
                   +
                 </div>
               )}
@@ -110,7 +133,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
           placeholder="Poll Question"
           name="questionName"
           value={quiz.questions[currentQuestionIndex].questionName}
-          onChange={handleInput}
+          onChange={handleQuestionInput}
         />
       </div>
       <div className={styles.row_3}>
@@ -137,27 +160,52 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                   <input
                     type="radio"
                     className={styles.radio_btn}
-                    checked={selectedOption === index + 1}
-                    onChange={() => setSelectedOption(index + 1)}
+                    checked={quiz.questions[currentQuestionIndex].correctOption === index}
+                    onChange={() => {
+                      setQuiz({
+                        ...quiz,
+                        questions:quiz.questions.map((question,i)=>
+                        i===currentQuestionIndex?{...question,correctOption:index}:question
+                        )
+                      })
+                    }}
                   />
                 )}
                 <input
                   type="text"
                   placeholder={
-                    quiz.optionType === "Text & Image Url" ? "Text" : quiz.optionType
+                    quiz.optionType === "Text & Image Url"
+                      ? "Text"
+                      : quiz.optionType
                   }
-                  value={quiz.questions[currentQuestionIndex].options[index]}
+                  name={
+                    quiz.optionType === "Text & Image Url"
+                      ? "text"
+                      : quiz.optionType === "Image Url"
+                      ? "imageUrl"
+                      : "text"
+                  }
+                  value={
+                    quiz.optionType === "Text & Image Url"
+                      ? quiz.questions[currentQuestionIndex].options[index].text
+                      : quiz.optionType === "Image Url"
+                      ? quiz.questions[currentQuestionIndex].options[index].imageUrl
+                      : quiz.questions[currentQuestionIndex].options[index].text
+                  }
                   onChange={(e) => handleOptionInput(e, index)}
                   className={`${styles.option_input} ${
-                    selectedOption === index + 1 && `${styles.change_bg}`
+                   quiz.questions[currentQuestionIndex].correctOption === index  && `${styles.change_bg}`
                   }`}
                 />
                 {quiz.optionType === "Text & Image Url" && (
                   <input
                     type="text"
                     placeholder="Image Url"
+                    name="imageUrl"
+                    value={quiz.questions[currentQuestionIndex].options[index].imageUrl}
+                    onChange={(e)=>handleOptionInput(e,index)}
                     className={`${styles.option_input} ${
-                      selectedOption === index + 1 && `${styles.change_bg}`
+                      quiz.questions[currentQuestionIndex].correctOption===index && `${styles.change_bg}`
                     }`}
                   />
                 )}
