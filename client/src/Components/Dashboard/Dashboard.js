@@ -12,22 +12,22 @@ function Dashboard() {
   const [quiz, setQuiz] = useState({
     name: "",
     quizType: "",
+    timer: "",
     questions: [
       {
         questionName: "",
         optionType: "",
-        options: ["", ""],
-        timer: "",
+        options: ["", ""]
       },
     ],
   });
 
-  useEffect(() => {
-    // console.log(clicked);
-    // console.log(quiz);
-    console.log("Wrapper is",showWrapper)
-    console.log("popup is", showPopup);
-  }, [showWrapper,showPopup]);
+  // useEffect(() => {
+  //   // console.log(clicked);
+  //   // console.log(quiz);
+  //   console.log("Wrapper is",showWrapper)
+  //   console.log("popup is", showPopup);
+  // }, [showWrapper,showPopup]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

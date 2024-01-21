@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import styles from "./QuizQuestion.module.css";
+import image1 from "../../assets/material-symbols_delete.png";
 
-function QuizQuestion({ quiz, setQuiz,setShowWrapper,setShowPopup}) {
+function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   const [optionType, setOptionType] = useState("Text");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(-1);
 
   useEffect(() => {
-    console.log(currentIndex);
+    console.log("currentIndex is",currentIndex);
   }, [currentIndex]);
 
-  const handleUpdate = () => {
+  const addQuestion = () => {
     const newQuestion = {
       questionName: "",
       optionType: "",
@@ -29,7 +30,7 @@ function QuizQuestion({ quiz, setQuiz,setShowWrapper,setShowPopup}) {
     setOptionType(e.target.value);
   };
 
-  const handleNew = () => {
+  const addOption = () => {
     setQuiz({
       ...quiz,
       questions: quiz.questions.map((question, index) =>
@@ -40,14 +41,17 @@ function QuizQuestion({ quiz, setQuiz,setShowWrapper,setShowPopup}) {
     });
   };
 
-  const handleInput=(e)=>{
+  const handleInput = (e) => {
+    const {name,value}=e.target;
     setQuiz({
       ...quiz,
-      questions:quiz.questions.map((question,index)=>
-      index===currentIndex? {...question,questionName:e.target.value}:question
-      )
-    })
-  }
+      questions: quiz.questions.map((question, index) =>
+        index === currentIndex
+          ? { ...question, [name]: value }
+          : question
+      ),
+    });
+  };
 
   return (
     <div className={styles.quiz_form}>
@@ -60,15 +64,15 @@ function QuizQuestion({ quiz, setQuiz,setShowWrapper,setShowPopup}) {
                   index === selectedQuestion && `${styles.selected_question}`
                 }`}
                 onClick={() => {
-                  setSelectedQuestion(index)
-                  setCurrentIndex(index)
+                  setSelectedQuestion(index);
+                  setCurrentIndex(index);
                 }}
               >
                 {index + 1}
               </div>
 
               {index + 1 === quiz.questions.length && index + 1 !== 5 && (
-                <div className={styles.add_btn} onClick={handleUpdate}>
+                <div className={styles.add_btn} onClick={addQuestion}>
                   +
                 </div>
               )}
@@ -94,6 +98,7 @@ function QuizQuestion({ quiz, setQuiz,setShowWrapper,setShowPopup}) {
             <input
               type="radio"
               className={styles.radio_btn}
+              name="questionName"
               value={value}
               checked={optionType === value}
               onChange={handleChange}
@@ -133,11 +138,21 @@ function QuizQuestion({ quiz, setQuiz,setShowWrapper,setShowPopup}) {
                     }`}
                   />
                 )}
+                {index + 1 > 2 && (
+                  <div className={styles.remove_btn}>
+                    <img
+                      src={image1}
+                      className={styles.delete_btn}
+                      alt="delete_btn"
+                      onClick={()=>{}}
+                    />
+                  </div>
+                )}
               </div>
               {index + 1 === quiz.questions[currentIndex].options.length &&
                 quiz.questions[currentIndex].options.length < 4 && (
                   <div className={styles.second_btn}>
-                    <button className={styles.add_option} onClick={handleNew}>
+                    <button className={styles.add_option} onClick={addOption}>
                       Add Option
                     </button>
                   </div>
@@ -145,14 +160,31 @@ function QuizQuestion({ quiz, setQuiz,setShowWrapper,setShowPopup}) {
             </div>
           ))}
         </div>
-        <div className={styles.col_2}></div>
+        {quiz.quizType === "Q/A" && (
+          <div className={styles.col_2}>
+            <div className={styles.timer}>Timer</div>
+            {["OFF", "5 sec", "10 sec"].map((time, index) => (
+              <div
+                key={index}
+                className={`${styles.timer_duration} ${
+                  quiz.timer === time && `${styles.add_bg}`
+                }`}
+                onClick={()=>{
+                  setQuiz({...quiz,timer:time})
+                }}
+              >
+                {time}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className={styles.button_box}>
         <button
           className={styles.cancel}
-          onClick={() =>{
-             setShowWrapper(false)
-             setShowPopup(false)
+          onClick={() => {
+            setShowWrapper(false);
+            setShowPopup(false);
           }}
         >
           Cancel
