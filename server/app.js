@@ -1,6 +1,8 @@
 import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
+import { AppError } from "./utils/appError.js"
+import { globalErrorHandler } from "./middlewares/error.js"
 
 const app=express()
 
@@ -24,6 +26,11 @@ app.get('/health',(req,res)=>{
     })
 })
 
+app.all('*',(req,res,next)=>{
+    next(AppError(`cant find ${req.originalUrl} on this server`,400))
+})
+
+app.use(globalErrorHandler)
 
 app.listen(process.env.PORT,()=>{
     mongoose
