@@ -6,16 +6,10 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
 
-  // useEffect(() => {
-  //   console.log("currentQuestionIndex is", currentQuestionIndex);
-  //   console.log("quiz is", quiz);
-  // }, [currentQuestionIndex, quiz]);
-
   useEffect(() => {
-    console.log("selected question index is",selectedQuestion);
-    console.log("current question index is",currentQuestionIndex)
-  }, [selectedQuestion,currentQuestionIndex]);
-  
+    console.log("currentQuestionIndex is", currentQuestionIndex);
+    console.log("selected question index is", selectedQuestion);
+  }, [currentQuestionIndex, selectedQuestion]);
 
   const addQuestion = (questionIndex) => {
     const newQuestion = {
@@ -31,8 +25,8 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
       ...quiz,
       questions: [...quiz.questions, newQuestion],
     });
-    setCurrentQuestionIndex(questionIndex+1)
-    setSelectedQuestion(questionIndex+1)
+    setCurrentQuestionIndex(questionIndex + 1);
+    setSelectedQuestion(questionIndex + 1);
   };
 
   const handleChange = (e) => {
@@ -85,14 +79,34 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
     });
   };
 
-  const deleteQuestion=(questionIndex)=>{
+  const deleteQuestion = (questionIndex) => {
     setQuiz({
       ...quiz,
-      questions:quiz.questions.filter((question,index)=>index!==questionIndex)
-    })
-    setCurrentQuestionIndex(questionIndex-1)
-    setSelectedQuestion(questionIndex-1)
-  }
+      questions: quiz.questions.filter(
+        (question, index) => index !== questionIndex
+      ),
+    });
+    // setCurrentQuestionIndex(questionIndex-1)
+    // setSelectedQuestion(questionIndex-1)
+    setCurrentQuestionIndex(quiz.questions.length - 2);
+    setSelectedQuestion(quiz.questions.length - 2);
+  };
+
+  const deleteOption = (optionIndex) => {
+    setQuiz({
+      ...quiz,
+      questions: quiz.questions.map((question, index) =>
+        index === currentQuestionIndex
+          ? {
+              ...question,
+              options: question.options.filter(
+                (option, i) => i !== optionIndex
+              ),
+            }
+          : question
+      ),
+    });
+  };
 
   return (
     <div className={styles.quiz_form}>
@@ -112,11 +126,19 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                 {index + 1}
               </div>
               {index + 1 > 1 && (
-                <button className={styles.remove_question} onClick={()=>deleteQuestion(index)}>X</button>
+                <button
+                  className={styles.remove_question}
+                  onClick={() => deleteQuestion(index)}
+                >
+                  X
+                </button>
               )}
 
               {index + 1 === quiz.questions.length && index + 1 !== 5 && (
-                <div className={styles.add_btn} onClick={()=>addQuestion(index)}>
+                <div
+                  className={styles.add_btn}
+                  onClick={() => addQuestion(index)}
+                >
                   +
                 </div>
               )}
@@ -160,14 +182,19 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                   <input
                     type="radio"
                     className={styles.radio_btn}
-                    checked={quiz.questions[currentQuestionIndex].correctOption === index}
+                    checked={
+                      quiz.questions[currentQuestionIndex].correctOption ===
+                      index
+                    }
                     onChange={() => {
                       setQuiz({
                         ...quiz,
-                        questions:quiz.questions.map((question,i)=>
-                        i===currentQuestionIndex?{...question,correctOption:index}:question
-                        )
-                      })
+                        questions: quiz.questions.map((question, i) =>
+                          i === currentQuestionIndex
+                            ? { ...question, correctOption: index }
+                            : question
+                        ),
+                      });
                     }}
                   />
                 )}
@@ -189,12 +216,14 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                     quiz.optionType === "Text & Image Url"
                       ? quiz.questions[currentQuestionIndex].options[index].text
                       : quiz.optionType === "Image Url"
-                      ? quiz.questions[currentQuestionIndex].options[index].imageUrl
+                      ? quiz.questions[currentQuestionIndex].options[index]
+                          .imageUrl
                       : quiz.questions[currentQuestionIndex].options[index].text
                   }
                   onChange={(e) => handleOptionInput(e, index)}
                   className={`${styles.option_input} ${
-                   quiz.questions[currentQuestionIndex].correctOption === index  && `${styles.change_bg}`
+                    quiz.questions[currentQuestionIndex].correctOption ===
+                      index && `${styles.change_bg}`
                   }`}
                 />
                 {quiz.optionType === "Text & Image Url" && (
@@ -202,10 +231,14 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                     type="text"
                     placeholder="Image Url"
                     name="imageUrl"
-                    value={quiz.questions[currentQuestionIndex].options[index].imageUrl}
-                    onChange={(e)=>handleOptionInput(e,index)}
+                    value={
+                      quiz.questions[currentQuestionIndex].options[index]
+                        .imageUrl
+                    }
+                    onChange={(e) => handleOptionInput(e, index)}
                     className={`${styles.option_input} ${
-                      quiz.questions[currentQuestionIndex].correctOption===index && `${styles.change_bg}`
+                      quiz.questions[currentQuestionIndex].correctOption ===
+                        index && `${styles.change_bg}`
                     }`}
                   />
                 )}
@@ -215,6 +248,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                       src={image1}
                       className={styles.delete_btn}
                       alt="delete_btn"
+                      onClick={() => deleteOption(index)}
                     />
                   </div>
                 )}
