@@ -6,14 +6,19 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
 
-  useEffect(() => {
-    console.log("currentQuestionIndex is", currentQuestionIndex);
-    console.log("selected question index is", selectedQuestion);
-  }, [currentQuestionIndex, selectedQuestion]);
+  // useEffect(() => {
+  //   console.log("currentQuestionIndex is", currentQuestionIndex);
+  //   console.log("selected question index is", selectedQuestion);
+  // }, [currentQuestionIndex, selectedQuestion]);
+
+  useEffect(()=>{
+    console.log(quiz)
+  },[quiz])
 
   const addQuestion = (questionIndex) => {
     const newQuestion = {
       questionName: "",
+      optionType: "Text",
       options: [
         { text: "", imageUrl: "" },
         { text: "", imageUrl: "" },
@@ -29,10 +34,12 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
     setSelectedQuestion(questionIndex + 1);
   };
 
-  const handleChange = (e) => {
+  const changeOptionType = (e) => {
     setQuiz({
       ...quiz,
-      optionType: e.target.value,
+      questions: quiz.questions.map((question, index) =>
+        index === currentQuestionIndex ? {...question,optionType:e.target.value} : question
+      ),
     });
   };
 
@@ -166,8 +173,10 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
               type="radio"
               className={styles.radio_btn}
               value={value}
-              checked={quiz.optionType === value}
-              onChange={handleChange}
+              checked={
+                quiz.questions[currentQuestionIndex].optionType === value
+              }
+              onChange={changeOptionType}
             />
             <div>{value}</div>
           </div>
@@ -201,21 +210,21 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                 <input
                   type="text"
                   placeholder={
-                    quiz.optionType === "Text & Image Url"
+                    quiz.questions[currentQuestionIndex].optionType === "Text & Image Url"
                       ? "Text"
-                      : quiz.optionType
+                      :  quiz.questions[currentQuestionIndex].optionType
                   }
                   name={
-                    quiz.optionType === "Text & Image Url"
+                    quiz.questions[currentQuestionIndex].optionType === "Text & Image Url"
                       ? "text"
-                      : quiz.optionType === "Image Url"
+                      :  quiz.questions[currentQuestionIndex].optionType === "Image Url"
                       ? "imageUrl"
                       : "text"
                   }
                   value={
-                    quiz.optionType === "Text & Image Url"
+                    quiz.questions[currentQuestionIndex].optionType === "Text & Image Url"
                       ? quiz.questions[currentQuestionIndex].options[index].text
-                      : quiz.optionType === "Image Url"
+                      : quiz.questions[currentQuestionIndex].optionType === "Image Url"
                       ? quiz.questions[currentQuestionIndex].options[index]
                           .imageUrl
                       : quiz.questions[currentQuestionIndex].options[index].text
@@ -226,7 +235,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                       index && `${styles.change_bg}`
                   }`}
                 />
-                {quiz.optionType === "Text & Image Url" && (
+                {quiz.questions[currentQuestionIndex].optionType === "Text & Image Url" && (
                   <input
                     type="text"
                     placeholder="Image Url"
@@ -238,7 +247,7 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                     onChange={(e) => handleOptionInput(e, index)}
                     className={`${styles.option_input} ${
                       quiz.questions[currentQuestionIndex].correctOption ===
-                        index && `${styles.change_bg}`
+                        index && quiz.quizType!=="Poll" && `${styles.change_bg}`
                     }`}
                   />
                 )}
