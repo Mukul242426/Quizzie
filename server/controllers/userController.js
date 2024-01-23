@@ -15,6 +15,15 @@ export const signup = async (req, res, next) => {
     if (user) {
       return next(AppError("User already exists", 400));
     }
+
+    if(password.length<8){
+      return next(AppError("Password must be atleast 8 characters long",400))
+    }
+
+    if(password!==confirmPassword){
+      return next(AppError("passwords do not match",400))
+    }
+
     const protectedPassword = await bcrypt.hash(password, 10);
     user = await User.create({
       name,

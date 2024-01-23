@@ -4,12 +4,12 @@ const optionSchema=new mongoose.Schema({
     text:{
         type:String,
         trim:true,
-        required:[true,"All Fields are required"]
+        default:""
     },
     imageUrl:{
         type:String,
         trim:true,
-        required:[true,"All Fields are required"]
+        default:""
     }
 })
 
@@ -33,7 +33,7 @@ const questionSchema=new mongoose.Schema({
         type:Number,
         min:-1,
         max:3,
-        required:[true,"correct option is required"]
+        default:-1
     }
 })
 

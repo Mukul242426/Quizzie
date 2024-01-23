@@ -3,6 +3,8 @@ import mongoose from "mongoose"
 import dotenv from "dotenv"
 import { AppError } from "./utils/appError.js"
 import { globalErrorHandler } from "./middlewares/error.js"
+import userRouter from "./routes/userRoute.js"
+import quizRouter from "./routes/quizRoute.js"
 
 const app=express()
 
@@ -25,6 +27,10 @@ app.get('/health',(req,res)=>{
         message:"Server is up and running"
     })
 })
+
+app.use('/api/v1',userRouter)
+app.use('/api/v1',quizRouter)
+
 
 app.all('*',(req,res,next)=>{
     next(AppError(`cant find ${req.originalUrl} on this server`,400))
