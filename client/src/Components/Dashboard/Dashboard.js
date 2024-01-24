@@ -17,18 +17,24 @@ function Dashboard() {
       {
         questionName: "",
         optionType: "Text",
-        options: [{text:"",imageUrl:""},{text:"",imageUrl:""}],
-        correctOption:-1
+        options: [
+          { text: "", imageUrl: "" },
+          { text: "", imageUrl: "" },
+        ],
+        correctOption: -1,
       },
     ],
   });
 
-  // useEffect(() => {
-  //   // console.log(clicked);
-  //   // console.log(quiz);
-  //   console.log("Wrapper is",showWrapper)
-  //   console.log("popup is", showPopup);
-  // }, [showWrapper,showPopup]);
+  useEffect(() => {
+    if (localStorage.getItem("clicked")) {
+      setClicked(JSON.parse(localStorage.getItem("clicked")));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("clicked", JSON.stringify(clicked));
+  }, [clicked]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +46,7 @@ function Dashboard() {
 
   const handleContinue = () => {
     if (quiz.name && quiz.quizType) {
-      setShowPopup(!showPopup)
+      setShowPopup(!showPopup);
     }
   };
 
@@ -123,7 +129,7 @@ function Dashboard() {
                 <button
                   className={styles.cancel}
                   onClick={() => {
-                    setShowWrapper(!showWrapper)
+                    setShowWrapper(!showWrapper);
                     setShowPopup(!showPopup);
                   }}
                 >
@@ -140,7 +146,7 @@ function Dashboard() {
               setQuiz={setQuiz}
               setShowWrapper={setShowWrapper}
               setShowPopup={setShowPopup}
-              />
+            />
           )}
         </div>
       )}

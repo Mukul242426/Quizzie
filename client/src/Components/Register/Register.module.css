@@ -129,3 +129,10 @@ label {
   line-height: normal;
   cursor: pointer;
 }
+
+.error{
+  display: flex;
+  justify-content: center;
+  color: red;
+  font-size: 0.8rem;
+}

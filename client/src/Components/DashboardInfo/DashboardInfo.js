@@ -52,4 +52,4 @@ function DashboardInfo() {
   )
 }
 
-export default DashboardInfo
+export default DashboardInfo;
