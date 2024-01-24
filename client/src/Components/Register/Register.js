@@ -4,6 +4,13 @@ import styles from "./Register.module.css";
 function Register() {
   const [isSignup, setIsSignup] = useState(true);
 
+  const [formData,setFormData]=useState({
+    name:"",
+    email:"",
+    password:"",
+    confirmPassword:""
+  })
+
   const handleSubmit = () => {};
 
   return (
