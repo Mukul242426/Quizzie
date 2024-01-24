@@ -27,11 +27,14 @@ export const updateQuiz = async (req, res, next) => {
   const { timer, impressions, questions } = req.body;
 
   try {
-    await Quiz.findOneAndUpdate(
-      { _id: id },
+    const quiz=await Quiz.findOneAndUpdate(
+      { _id: id,userId:req.user._id },
       { timer, impressions, questions },
       { runValidators: true }
     );
+    if(!quiz){
+      return next("you cannot update someone else's quiz",400)
+    }
     res.status(200).json({
       success: true,
       message: "Quiz Updated Successfully",
@@ -41,14 +44,49 @@ export const updateQuiz = async (req, res, next) => {
   }
 };
 
-export const getAllQuizzes=(req,res,next)=>{
+export const getAllQuizzes = async (req, res, next) => {
+  try {
+    const quiz = await Quiz.find({ userId: req.user._id });
+    res.status(200).json({
+      success: true,
+      results: quiz.length,
+      quiz,
+    });
+  } catch (error) {
+    next(AppError(error.message, 400));
+  }
+};
 
-}
+export const getQuiz = async (req, res, next) => {
+  const { id } = req.params;
 
-export const getQuiz=(req,res,next)=>{
+  try {
+    const quiz = await Quiz.findOne({ _id: id });
+    if (!quiz) {
+      return next(AppError("Invalid quiz link", 400));
+    }
+    res.status(200).json({
+      success: true,
+      quiz,
+    });
+  } catch (error) {
+    next(AppError("Invalid quiz link", 400));
+  }
+};
 
-}
+export const deleteQuiz = async (req, res, next) => {
+  const { id } = req.params;
 
-export const deleteQuiz=(req,res,next)=>{
-    
-}
+  try {
+    const quiz=await Quiz.findOneAndDelete({_id:id,userId:req.user._id})
+    if(!quiz){
+      return next(AppError("you cannot delete someone else's quiz",400))
+    }
+    res.status(200).json({
+      success:true,
+      message:"quiz deleted successfully"
+    })
+  } catch (error) {
+    next(AppError(error.message,400))
+  }
+};

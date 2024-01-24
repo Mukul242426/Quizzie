@@ -29,7 +29,7 @@ app.get('/health',(req,res)=>{
 })
 
 app.use('/api/v1',userRouter)
-app.use('/api/v1',quizRouter)
+app.use('/api/v1/quizzes',quizRouter)
 
 
 app.all('*',(req,res,next)=>{
@@ -44,5 +44,5 @@ app.listen(process.env.PORT,()=>{
         dbName:'quizDetails'
     })
     .then(()=>console.log(`Server running successfully on http://localhost:${process.env.PORT}`))
-    .catch(()=>console.log(error))
+    .catch((error)=>console.log(error))
 })
