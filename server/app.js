@@ -5,8 +5,11 @@ import { AppError } from "./utils/appError.js"
 import { globalErrorHandler } from "./middlewares/error.js"
 import userRouter from "./routes/userRoute.js"
 import quizRouter from "./routes/quizRoute.js"
+import cors from 'cors'
 
 const app=express()
+
+app.use(cors())
 
 dotenv.config()
 

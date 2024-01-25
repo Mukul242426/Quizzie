@@ -4,8 +4,14 @@ import DashboardInfo from "../DashboardInfo/DashboardInfo";
 import Analytics from "../Analytics/Analytics";
 import image1 from "../../assets/Vector 1 copy.png";
 import QuizQuestion from "../QuizQuestion/QuizQuestion";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { FRONTEND_URL } from "../../utils/utils";
+import axios from "axios";
 
 function Dashboard() {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [clicked, setClicked] = useState(0);
   const [showWrapper, setShowWrapper] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -25,6 +31,12 @@ function Dashboard() {
       },
     ],
   });
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setIsLoggedIn(!isLoggedIn);
+    }
+  }, []);
 
   useEffect(() => {
     if (localStorage.getItem("clicked")) {
@@ -47,6 +59,16 @@ function Dashboard() {
   const handleContinue = () => {
     if (quiz.name && quiz.quizType) {
       setShowPopup(!showPopup);
+    }
+  };
+
+  const handleClick = () => {
+    if (isLoggedIn) {
+      localStorage.removeItem("token");
+      setIsLoggedIn(!isLoggedIn);
+      toast.success("Logged Out Successfully");
+    } else {
+      navigate("/");
     }
   };
 
@@ -79,7 +101,9 @@ function Dashboard() {
             <div className={styles.line}>
               <img src={image1} className={styles.horizontal_line} alt="line" />
             </div>
-            <div className={styles.user_auth}>LOGOUT</div>
+            <div className={styles.user_auth} onClick={handleClick}>
+              {isLoggedIn ? "LOGOUT" : "LOGIN"}
+            </div>
           </div>
         </div>
         {clicked === 0 ? <DashboardInfo /> : <Analytics />}

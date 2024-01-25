@@ -46,11 +46,18 @@ export const updateQuiz = async (req, res, next) => {
 
 export const getAllQuizzes = async (req, res, next) => {
   try {
-    const quiz = await Quiz.find({ userId: req.user._id });
+    const quizzes = await Quiz.find({ userId: req.user._id });
+
+    let count=0;
+    quizzes.forEach((quiz,index)=>{
+      count+=quiz.questions.length
+    })
+
     res.status(200).json({
       success: true,
-      results: quiz.length,
-      quiz,
+      quizCreated:quizzes.length,
+      questionsCreated:count,
+      quizzes,
     });
   } catch (error) {
     next(AppError(error.message, 400));

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styles from './Analytics.module.css'
 import image1 from '../../assets/edit_btn.png'
 import image2 from '../../assets/delete_btn.png'
@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 
 function Analytics() {
 
-  const [quizs,setQuizs]=useState([1,2,3,4,5,6])
+  const quizs=[1,2,3,4,5,6]
 
   return (
     <div className={styles.analytics}>
