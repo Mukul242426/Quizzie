@@ -5,16 +5,17 @@ export const createQuiz = async (req, res, next) => {
   const { name, quizType, timer, questions } = req.body;
 
   try {
-    await Quiz.create({
+   const quiz=await Quiz.create({
       userId: req.user._id,
       name,
       quizType,
       timer,
-      questions,
+      questions
     });
     res.status(200).json({
       success: true,
       message: "quiz created successfully",
+      quizId:quiz._id
     });
   } catch (error) {
     next(AppError(error.message, 400));

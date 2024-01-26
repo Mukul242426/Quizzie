@@ -10,6 +10,7 @@
   background-color: #ededed;
   display: flex;
   justify-content: center;
+  overflow: auto;
 }
 
 .analysis_box {
@@ -79,4 +80,8 @@
   font-weight: 600;
   line-height: 40px; /* 307.692% */
   text-decoration-line: underline;
+}
+
+.edit_quiz,.delete_quiz{
+  cursor: pointer;
 }

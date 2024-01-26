@@ -213,7 +213,7 @@
 
 .success_msg {
   color: #474444;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   text-align: center;
   font-size: 2rem;
   font-style: normal;
@@ -221,9 +221,22 @@
   line-height: normal;
 }
 
-.shareable_link{
+.shareable_link {
   width: 100%;
   padding: 1.2rem;
   background-color: #ededed;
   border-radius: 0.5rem;
+}
+
+.share_btn {
+  border-radius: 0.5rem;
+  background: #60b84b;
+  color: #fff;
+  padding: 0.5rem;
+  font-family: 'Poppins';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: 80%;
 }

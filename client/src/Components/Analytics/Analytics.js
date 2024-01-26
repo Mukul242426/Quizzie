@@ -8,7 +8,7 @@ import axios from 'axios'
 import { FRONTEND_URL } from "../../utils/utils";
 import moment from 'moment'
 
-function Analytics({isLoggedIn}) {
+function Analytics({isLoggedIn,quizLink,setEditId,setShowWrapper,setShowQuestion}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -29,7 +29,15 @@ function Analytics({isLoggedIn}) {
       }
     };
     fetchData();
-  }, [isLoggedIn]);
+  }, [isLoggedIn,quizLink]);
+
+  const handleEdit=(id)=>{
+    setEditId(id)
+    setShowWrapper(true)
+    setShowQuestion(true)
+    
+    
+  }
 
   return (
     <div className={styles.analytics}>
@@ -60,8 +68,8 @@ function Analytics({isLoggedIn}) {
                 <td>{quiz && quiz.createdOn && `${moment.utc(quiz.createdOn).format('DD/MM/YYYY')}`}</td>
                 <td>{quiz && quiz.impressions && quiz.impressions}</td>
                 <td className={styles.button_box}>
-                  <img src={image1} alt="edit" />
-                  <img src={image2} alt="delete" />
+                  <img src={image1} alt="edit" className={styles.edit_quiz} onClick={()=>handleEdit(quiz._id)}/>
+                  <img src={image2} alt="delete" className={styles.delete_quiz}/>
                   <img src={image3} alt="share" />
                 </td>
                 <td>

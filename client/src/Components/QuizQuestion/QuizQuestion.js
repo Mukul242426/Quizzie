@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./QuizQuestion.module.css";
 import image1 from "../../assets/material-symbols_delete.png";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { FRONTEND_URL } from "../../utils/utils";
 
 function QuizQuestion({
   quiz,
@@ -10,6 +12,8 @@ function QuizQuestion({
   setShowPopup,
   setShowQuestion,
   initialQuiz,
+  setQuizLink,
+  editId,
 }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
@@ -22,6 +26,21 @@ function QuizQuestion({
   useEffect(() => {
     console.log(quiz);
   }, [quiz]);
+
+  useEffect(() => {
+    const getQuizData = async () => {
+      try {
+        const response = await axios.get(`${FRONTEND_URL}/quizzes/${editId}`);
+        console.log(response.data);
+        setQuiz(response.data.quiz);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (editId) {
+      getQuizData();
+    }
+  }, []);
 
   const addQuestion = (questionIndex) => {
     const newQuestion = {
@@ -128,24 +147,19 @@ function QuizQuestion({
   const validateForm = () => {
     let success = true;
 
-    if (!quiz.timer) {
-      // toast.error("You need to provide a timer");
+    if (!quiz.timer && quiz.quizType === "Q/A") {
       success = false;
+      console.log("hello1");
     }
 
     if (quiz.quizType === "Q/A" || quiz.quizType === "Poll") {
       quiz.questions.forEach((question, index) => {
         if (quiz.quizType === "Q/A" && question.correctOption === -1) {
-          // toast.error(
-          //   `Please mark the correct option in question ${index + 1}`
-          // );
           success = false;
+          console.log("hello2");
         }
 
         if (!question.questionName) {
-          // toast.error(
-          //   `Please provide a question name in question ${index + 1}`
-          // );
           success = false;
         }
 
@@ -156,9 +170,6 @@ function QuizQuestion({
             (question.optionType === "Text & Image Url" &&
               (!option.text || !option.imageUrl))
           ) {
-            // toast.error(
-            //   `Please fill out option ${i + 1} in question ${index + 1}`
-            // );
             success = false;
           }
         });
@@ -167,19 +178,56 @@ function QuizQuestion({
     return success;
   };
 
-  const handleCreate = () => {
+  const updateQuiz = async () => {
+    try {
+      const jwttoken = JSON.parse(localStorage.getItem("token"));
+      const response = await axios.patch(`${FRONTEND_URL}/quizzes/${editId}`,quiz, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwttoken}`,
+        },
+      });
+      console.log(response);
+      toast.success("Quiz edited successfully")
+      setShowWrapper(false)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCreate = async () => {
     const validated = validateForm();
-    console.log("validated is ",validated)
     if (!validated) {
       toast.error("All Fields are required");
       return;
     }
+    if (editId) {
+      updateQuiz();
+      return;
+    }
 
-    setShowQuestion(false);
+    try {
+      const jwttoken = JSON.parse(localStorage.getItem("token"));
+      console.log(jwttoken);
+      const response = await axios.post(`${FRONTEND_URL}/quizzes`, quiz, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwttoken}`,
+        },
+      });
+      console.log(response.data);
+      setQuizLink(`http://localhost:3000/quiz/${response.data.quizId}`);
+      setShowQuestion(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <div className={styles.quiz_form}>
+    <div
+      className={styles.quiz_form}
+      onClick={(event) => event.stopPropagation()}
+    >
       <div className={styles.row_1}>
         <div className={styles.question}>
           {quiz.questions.map((question, index) => (
@@ -376,7 +424,7 @@ function QuizQuestion({
           Cancel
         </button>
         <button className={styles.continue} onClick={handleCreate}>
-          Create Quiz
+          {`${editId ? "Update Quiz" : "Create Quiz"}`}
         </button>
       </div>
     </div>

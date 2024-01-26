@@ -15,6 +15,8 @@ function Dashboard() {
   const [showWrapper, setShowWrapper] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
+  const [quizLink, setQuizLink] = useState("");
+  const [editId, setEditId] = useState("");
 
   const initialQuiz = {
     name: "",
@@ -33,6 +35,10 @@ function Dashboard() {
     ],
   };
   const [quiz, setQuiz] = useState(initialQuiz);
+
+  useEffect(() => {
+    console.log(editId);
+  }, [editId]);
 
   useEffect(() => {
     console.log({
@@ -64,6 +70,11 @@ function Dashboard() {
     if (!quiz.name || !quiz.quizType) {
       toast.error("All fields are required");
     } else {
+
+      if(editId){
+        setEditId('')
+      }
+
       setShowPopup(false);
       setShowQuestion(true);
     }
@@ -120,15 +131,27 @@ function Dashboard() {
         {clicked === 0 ? (
           <DashboardInfo isLoggedIn={isLoggedIn} />
         ) : (
-          <Analytics isLoggedIn={isLoggedIn} />
+          <Analytics
+            isLoggedIn={isLoggedIn}
+            quizLink={quizLink}
+            setEditId={setEditId}
+            setShowWrapper={setShowWrapper}
+            setShowQuestion={setShowQuestion}
+          />
         )}
       </div>
       {showWrapper && (
-        <div className={styles.wrapper}>
+        <div
+          className={styles.wrapper}
+          onClick={() => {
+            setShowWrapper(false);
+            setQuiz(initialQuiz);
+          }}
+        >
           {showPopup ? (
             <div
               className={styles.popup}
-              // onClick={(event) => event.stopPropagation()}
+              onClick={(event) => event.stopPropagation()}
             >
               <div className={styles.upper_box}>
                 <input
@@ -188,19 +211,19 @@ function Dashboard() {
               setShowPopup={setShowPopup}
               setShowQuestion={setShowQuestion}
               initialQuiz={initialQuiz}
+              setQuizLink={setQuizLink}
+              editId={editId}
             />
           ) : (
-            <div className={styles.quiz_created}>
-             <div className={styles.success_msg}>
-             Congrats your Quiz is Published!
-             </div>
-             <div className={styles.shareable_link}>
-              your quiz link here
-             </div>
-             <button className={styles.share_btn}>
-             Share
-             </button>
-
+            <div
+              className={styles.quiz_created}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className={styles.success_msg}>
+                Congrats your Quiz is Published!
+              </div>
+              <div className={styles.shareable_link}>{quizLink}</div>
+              <button className={styles.share_btn}>Share</button>
             </div>
           )}
         </div>

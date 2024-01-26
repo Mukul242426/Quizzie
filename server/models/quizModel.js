@@ -59,10 +59,9 @@ const quizSchema = new mongoose.Schema({
   timer: {
     type: String,
     enum: {
-      values: ["OFF", "5 sec", "10 sec"],
+      values: ["","OFF", "5 sec", "10 sec"],
       message: "{VALUE} is not a valid timer",
-    },
-    required: [true, "timer is required"],
+    }
   },
   impressions:{
     type:Number,
