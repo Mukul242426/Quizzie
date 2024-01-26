@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styles from "./QuizQuestion.module.css";
 import image1 from "../../assets/material-symbols_delete.png";
+import toast from "react-hot-toast";
 
-function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
+function QuizQuestion({
+  quiz,
+  setQuiz,
+  setShowWrapper,
+  setShowPopup,
+  setShowQuestion,
+  initialQuiz,
+}) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
 
@@ -11,9 +19,9 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
   //   console.log("selected question index is", selectedQuestion);
   // }, [currentQuestionIndex, selectedQuestion]);
 
-  useEffect(()=>{
-    console.log(quiz)
-  },[quiz])
+  useEffect(() => {
+    console.log(quiz);
+  }, [quiz]);
 
   const addQuestion = (questionIndex) => {
     const newQuestion = {
@@ -38,7 +46,9 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
     setQuiz({
       ...quiz,
       questions: quiz.questions.map((question, index) =>
-        index === currentQuestionIndex ? {...question,optionType:e.target.value} : question
+        index === currentQuestionIndex
+          ? { ...question, optionType: e.target.value }
+          : question
       ),
     });
   };
@@ -113,6 +123,59 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
           : question
       ),
     });
+  };
+
+  const validateForm = () => {
+    let success = true;
+
+    if (!quiz.timer) {
+      // toast.error("You need to provide a timer");
+      success = false;
+    }
+
+    if (quiz.quizType === "Q/A" || quiz.quizType === "Poll") {
+      quiz.questions.forEach((question, index) => {
+        if (quiz.quizType === "Q/A" && question.correctOption === -1) {
+          // toast.error(
+          //   `Please mark the correct option in question ${index + 1}`
+          // );
+          success = false;
+        }
+
+        if (!question.questionName) {
+          // toast.error(
+          //   `Please provide a question name in question ${index + 1}`
+          // );
+          success = false;
+        }
+
+        question.options.forEach((option, i) => {
+          if (
+            (question.optionType === "Text" && !option.text) ||
+            (question.optionType === "Image Url" && !option.imageUrl) ||
+            (question.optionType === "Text & Image Url" &&
+              (!option.text || !option.imageUrl))
+          ) {
+            // toast.error(
+            //   `Please fill out option ${i + 1} in question ${index + 1}`
+            // );
+            success = false;
+          }
+        });
+      });
+    }
+    return success;
+  };
+
+  const handleCreate = () => {
+    const validated = validateForm();
+    console.log("validated is ",validated)
+    if (!validated) {
+      toast.error("All Fields are required");
+      return;
+    }
+
+    setShowQuestion(false);
   };
 
   return (
@@ -210,21 +273,26 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                 <input
                   type="text"
                   placeholder={
-                    quiz.questions[currentQuestionIndex].optionType === "Text & Image Url"
+                    quiz.questions[currentQuestionIndex].optionType ===
+                    "Text & Image Url"
                       ? "Text"
-                      :  quiz.questions[currentQuestionIndex].optionType
+                      : quiz.questions[currentQuestionIndex].optionType
                   }
                   name={
-                    quiz.questions[currentQuestionIndex].optionType === "Text & Image Url"
+                    quiz.questions[currentQuestionIndex].optionType ===
+                    "Text & Image Url"
                       ? "text"
-                      :  quiz.questions[currentQuestionIndex].optionType === "Image Url"
+                      : quiz.questions[currentQuestionIndex].optionType ===
+                        "Image Url"
                       ? "imageUrl"
                       : "text"
                   }
                   value={
-                    quiz.questions[currentQuestionIndex].optionType === "Text & Image Url"
+                    quiz.questions[currentQuestionIndex].optionType ===
+                    "Text & Image Url"
                       ? quiz.questions[currentQuestionIndex].options[index].text
-                      : quiz.questions[currentQuestionIndex].optionType === "Image Url"
+                      : quiz.questions[currentQuestionIndex].optionType ===
+                        "Image Url"
                       ? quiz.questions[currentQuestionIndex].options[index]
                           .imageUrl
                       : quiz.questions[currentQuestionIndex].options[index].text
@@ -235,7 +303,8 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                       index && `${styles.change_bg}`
                   }`}
                 />
-                {quiz.questions[currentQuestionIndex].optionType === "Text & Image Url" && (
+                {quiz.questions[currentQuestionIndex].optionType ===
+                  "Text & Image Url" && (
                   <input
                     type="text"
                     placeholder="Image Url"
@@ -247,7 +316,9 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
                     onChange={(e) => handleOptionInput(e, index)}
                     className={`${styles.option_input} ${
                       quiz.questions[currentQuestionIndex].correctOption ===
-                        index && quiz.quizType!=="Poll" && `${styles.change_bg}`
+                        index &&
+                      quiz.quizType !== "Poll" &&
+                      `${styles.change_bg}`
                     }`}
                   />
                 )}
@@ -299,11 +370,14 @@ function QuizQuestion({ quiz, setQuiz, setShowWrapper, setShowPopup }) {
           onClick={() => {
             setShowWrapper(false);
             setShowPopup(false);
+            setQuiz(initialQuiz);
           }}
         >
           Cancel
         </button>
-        <button className={styles.continue}>Create Quiz</button>
+        <button className={styles.continue} onClick={handleCreate}>
+          Create Quiz
+        </button>
       </div>
     </div>
   );

@@ -27,13 +27,13 @@ export const updateQuiz = async (req, res, next) => {
   const { timer, impressions, questions } = req.body;
 
   try {
-    const quiz=await Quiz.findOneAndUpdate(
-      { _id: id,userId:req.user._id },
+    const quiz = await Quiz.findOneAndUpdate(
+      { _id: id, userId: req.user._id },
       { timer, impressions, questions },
       { runValidators: true }
     );
-    if(!quiz){
-      return next("you cannot update someone else's quiz",400)
+    if (!quiz) {
+      return next("you cannot update someone else's quiz", 400);
     }
     res.status(200).json({
       success: true,
@@ -45,18 +45,30 @@ export const updateQuiz = async (req, res, next) => {
 };
 
 export const getAllQuizzes = async (req, res, next) => {
-  try {
-    const quizzes = await Quiz.find({ userId: req.user._id });
+  const { sort } = req.query;
 
-    let count=0;
-    quizzes.forEach((quiz,index)=>{
-      count+=quiz.questions.length
-    })
+  try {
+    let quizzes;
+
+    if(sort){
+      quizzes=await Quiz.find({userId:req.user._id}).sort({impressions:-1})
+    }
+    else{
+      quizzes = await Quiz.find({ userId: req.user._id });
+    }
+
+    let count = 0;
+    let impressions = 0;
+    quizzes.forEach((quiz, index) => {
+      impressions += quiz.impressions;
+      count += quiz.questions.length;
+    });
 
     res.status(200).json({
       success: true,
-      quizCreated:quizzes.length,
-      questionsCreated:count,
+      quizCreated: quizzes.length,
+      questionsCreated: count,
+      impressions,
       quizzes,
     });
   } catch (error) {
@@ -85,15 +97,15 @@ export const deleteQuiz = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const quiz=await Quiz.findOneAndDelete({_id:id,userId:req.user._id})
-    if(!quiz){
-      return next(AppError("you cannot delete someone else's quiz",400))
+    const quiz = await Quiz.findOneAndDelete({ _id: id, userId: req.user._id });
+    if (!quiz) {
+      return next(AppError("you cannot delete someone else's quiz", 400));
     }
     res.status(200).json({
-      success:true,
-      message:"quiz deleted successfully"
-    })
+      success: true,
+      message: "quiz deleted successfully",
+    });
   } catch (error) {
-    next(AppError(error.message,400))
+    next(AppError(error.message, 400));
   }
 };

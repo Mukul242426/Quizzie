@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./Signup.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -6,9 +6,11 @@ import axios from "axios";
 import { FRONTEND_URL } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { UserContext } from "../../contexts/UserContext";
 
 function Signup() {
   const navigate = useNavigate();
+  const {setIsLoggedIn}=useContext(UserContext);
 
   const initialValues = {
     name: "",
@@ -44,6 +46,7 @@ function Signup() {
       const response = await axios.post(`${FRONTEND_URL}/signup`, values);
       localStorage.setItem("token", JSON.stringify(response.data.jwtToken));
       toast.success(response.data.message);
+      setIsLoggedIn(true)
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
