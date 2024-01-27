@@ -12,11 +12,21 @@ function Dashboard() {
   const navigate = useNavigate();
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
   const [clicked, setClicked] = useState(0);
-  const [showWrapper, setShowWrapper] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
-  const [showQuestion, setShowQuestion] = useState(false);
+  // const [showWrapper, setShowWrapper] = useState(false);
+  // const [showPopup, setShowPopup] = useState(false);
+  // const [showQuestion, setShowQuestion] = useState(false);
   const [quizLink, setQuizLink] = useState("");
   const [editId, setEditId] = useState("");
+  // const [showDelete, setShowDelete] = useState(false);
+
+  const initialPopup={
+    showWrapper:false,
+    showPopup:false,
+    showQuestion:false,
+    showDelete:false
+  }
+
+  const [popups,setPopups]=useState(initialPopup)
 
   const initialQuiz = {
     name: "",
@@ -42,11 +52,9 @@ function Dashboard() {
 
   useEffect(() => {
     console.log({
-      showWrapper,
-      showPopup,
-      showQuestion,
+     popups
     });
-  }, [showWrapper, showPopup, showQuestion]);
+  }, [popups]);
 
   useEffect(() => {
     if (localStorage.getItem("clicked")) {
@@ -70,13 +78,11 @@ function Dashboard() {
     if (!quiz.name || !quiz.quizType) {
       toast.error("All fields are required");
     } else {
+      // if (editId) {
+      //   setEditId("");
+      // }
 
-      if(editId){
-        setEditId('')
-      }
-
-      setShowPopup(false);
-      setShowQuestion(true);
+     setPopups({...popups,showPopup:false,showQuestion:true})
     }
   };
 
@@ -109,8 +115,11 @@ function Dashboard() {
                     if (!isLoggedIn) {
                       toast.error("You need to login first");
                     } else {
-                      setShowWrapper(true);
-                      setShowPopup(true);
+                      setPopups({
+                        ...popups,
+                        showWrapper:true,
+                        showPopup:true
+                      })
                     }
                   }
                 }}
@@ -135,20 +144,21 @@ function Dashboard() {
             isLoggedIn={isLoggedIn}
             quizLink={quizLink}
             setEditId={setEditId}
-            setShowWrapper={setShowWrapper}
-            setShowQuestion={setShowQuestion}
+            popups={popups}
+            setPopups={setPopups}
           />
         )}
       </div>
-      {showWrapper && (
+      {popups.showWrapper && (
         <div
           className={styles.wrapper}
           onClick={() => {
-            setShowWrapper(false);
+            setPopups(initialPopup)
             setQuiz(initialQuiz);
+            setEditId("")
           }}
         >
-          {showPopup ? (
+          {popups.showPopup ? (
             <div
               className={styles.popup}
               onClick={(event) => event.stopPropagation()}
@@ -191,9 +201,9 @@ function Dashboard() {
                 <button
                   className={styles.cancel}
                   onClick={() => {
-                    setShowWrapper(!showWrapper);
-                    setShowPopup(!showPopup);
+                    
                     setQuiz(initialQuiz);
+                    setPopups(initialPopup)
                   }}
                 >
                   Cancel
@@ -203,17 +213,23 @@ function Dashboard() {
                 </button>
               </div>
             </div>
-          ) : showQuestion ? (
+          ) : popups.showQuestion ? (
             <QuizQuestion
               quiz={quiz}
               setQuiz={setQuiz}
-              setShowWrapper={setShowWrapper}
-              setShowPopup={setShowPopup}
-              setShowQuestion={setShowQuestion}
               initialQuiz={initialQuiz}
+              popups={popups}
+              setPopups={setPopups}
+              initialPopup={initialPopup}
               setQuizLink={setQuizLink}
               editId={editId}
+              setEditId={setEditId}
             />
+          ) : popups.showDelete ? (
+            <div className={styles.delete_container}>
+
+
+            </div>
           ) : (
             <div
               className={styles.quiz_created}

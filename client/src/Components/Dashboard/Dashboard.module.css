@@ -240,3 +240,10 @@
   line-height: normal;
   width: 80%;
 }
+
+.delete_container{
+  width: 35rem;
+  height: 15rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+}

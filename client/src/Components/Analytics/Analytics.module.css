@@ -8,8 +8,11 @@
   width: 85%;
   height: 100vh;
   background-color: #ededed;
-  display: flex;
-  justify-content: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 3rem;
+  /* display: flex;
+  justify-content: center; */
   overflow: auto;
 }
 

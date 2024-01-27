@@ -8,7 +8,7 @@ import axios from 'axios'
 import { FRONTEND_URL } from "../../utils/utils";
 import moment from 'moment'
 
-function Analytics({isLoggedIn,quizLink,setEditId,setShowWrapper,setShowQuestion}) {
+function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -33,10 +33,11 @@ function Analytics({isLoggedIn,quizLink,setEditId,setShowWrapper,setShowQuestion
 
   const handleEdit=(id)=>{
     setEditId(id)
-    setShowWrapper(true)
-    setShowQuestion(true)
-    
-    
+   setPopups({...popups,showWrapper:true,showQuestion:true})   
+  }
+
+  const handleDelete=()=>{
+    setPopups({...popups,showWrapper:true,showDelete:true})
   }
 
   return (
@@ -69,11 +70,11 @@ function Analytics({isLoggedIn,quizLink,setEditId,setShowWrapper,setShowQuestion
                 <td>{quiz && quiz.impressions && quiz.impressions}</td>
                 <td className={styles.button_box}>
                   <img src={image1} alt="edit" className={styles.edit_quiz} onClick={()=>handleEdit(quiz._id)}/>
-                  <img src={image2} alt="delete" className={styles.delete_quiz}/>
+                  <img src={image2} alt="delete" className={styles.delete_quiz} onClick={handleDelete}/>
                   <img src={image3} alt="share" />
                 </td>
                 <td>
-                  <Link to="/quizAnalysis" className={styles.link_text}>
+                  <Link to={`/quizAnalysis/${quiz._id}`} className={styles.link_text}>
                     Question Wise Analysis
                   </Link>
                 </td>

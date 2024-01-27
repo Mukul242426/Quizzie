@@ -8,12 +8,13 @@ import { FRONTEND_URL } from "../../utils/utils";
 function QuizQuestion({
   quiz,
   setQuiz,
-  setShowWrapper,
-  setShowPopup,
-  setShowQuestion,
   initialQuiz,
+  popups,
+  setPopups,
+  initialPopup,
   setQuizLink,
   editId,
+  setEditId,
 }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
@@ -66,7 +67,23 @@ function QuizQuestion({
       ...quiz,
       questions: quiz.questions.map((question, index) =>
         index === currentQuestionIndex
-          ? { ...question, optionType: e.target.value }
+          ? {
+              ...question,
+              optionType: e.target.value,
+              options: question.options.map((option) => ({
+                text:
+                  e.target.value === "Text" ||
+                  e.target.value === "Text & Image Url"
+                    ? ""
+                    : option.text,
+                imageUrl:
+                  e.target.value === "Image Url" ||
+                  e.target.value === "Text & Image Url"
+                    ? ""
+                    : option.imageUrl,
+              })),
+              correctOption: -1,
+            }
           : question
       ),
     });
@@ -138,6 +155,10 @@ function QuizQuestion({
               options: question.options.filter(
                 (option, i) => i !== optionIndex
               ),
+              correctOption:
+                optionIndex === question.correctOption
+                  ? -1
+                  : question.correctOption,
             }
           : question
       ),
@@ -149,14 +170,12 @@ function QuizQuestion({
 
     if (!quiz.timer && quiz.quizType === "Q/A") {
       success = false;
-      console.log("hello1");
     }
 
     if (quiz.quizType === "Q/A" || quiz.quizType === "Poll") {
       quiz.questions.forEach((question, index) => {
         if (quiz.quizType === "Q/A" && question.correctOption === -1) {
           success = false;
-          console.log("hello2");
         }
 
         if (!question.questionName) {
@@ -181,15 +200,19 @@ function QuizQuestion({
   const updateQuiz = async () => {
     try {
       const jwttoken = JSON.parse(localStorage.getItem("token"));
-      const response = await axios.patch(`${FRONTEND_URL}/quizzes/${editId}`,quiz, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwttoken}`,
-        },
-      });
+      const response = await axios.patch(
+        `${FRONTEND_URL}/quizzes/${editId}`,
+        quiz,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwttoken}`,
+          },
+        }
+      );
       console.log(response);
-      toast.success("Quiz edited successfully")
-      setShowWrapper(false)
+      toast.success("Quiz edited successfully");
+      setPopups(initialPopup);
     } catch (error) {
       console.log(error);
     }
@@ -217,9 +240,17 @@ function QuizQuestion({
       });
       console.log(response.data);
       setQuizLink(`http://localhost:3000/quiz/${response.data.quizId}`);
-      setShowQuestion(false);
+      setPopups({ ...popups, showQuestion: false });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleCancel = () => {
+    setPopups(initialPopup);
+    setQuiz(initialQuiz)
+    if (editId) {
+      setEditId("");
     }
   };
 
@@ -413,14 +444,7 @@ function QuizQuestion({
         )}
       </div>
       <div className={styles.button_box}>
-        <button
-          className={styles.cancel}
-          onClick={() => {
-            setShowWrapper(false);
-            setShowPopup(false);
-            setQuiz(initialQuiz);
-          }}
-        >
+        <button className={styles.cancel} onClick={handleCancel}>
           Cancel
         </button>
         <button className={styles.continue} onClick={handleCreate}>
