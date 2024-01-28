@@ -233,7 +233,7 @@
   background: #60b84b;
   color: #fff;
   padding: 0.5rem;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-size: 1rem;
   font-style: normal;
   font-weight: 600;
@@ -241,9 +241,54 @@
   width: 80%;
 }
 
-.delete_container{
+.delete_container {
   width: 35rem;
-  height: 15rem;
   background-color: #fff;
   border-radius: 0.5rem;
+  padding: 2rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.heading {
+  color: #474444;
+  text-align: center;
+  font-family: "Poppins";
+  font-size: 2.35rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.button_box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirm_delete,
+.drop_btn {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-family: "Poppins";
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: 40%;
+  cursor: pointer;
+}
+
+.confirm_delete {
+  background-color: #ff4b4b;
+  color: #fff;
+}
+
+.drop_btn {
+  background-color: #fff;
+  color: #000000;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
 }

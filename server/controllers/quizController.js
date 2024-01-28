@@ -105,6 +105,7 @@ export const deleteQuiz = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "quiz deleted successfully",
+      deletedQuizId:quiz._id
     });
   } catch (error) {
     next(AppError(error.message, 400));

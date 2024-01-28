@@ -7,17 +7,17 @@ import QuizQuestion from "../QuizQuestion/QuizQuestion";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { UserContext } from "../../contexts/UserContext";
+import axios from 'axios'
+import { FRONTEND_URL } from "../../utils/utils";
 
 function Dashboard() {
   const navigate = useNavigate();
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
   const [clicked, setClicked] = useState(0);
-  // const [showWrapper, setShowWrapper] = useState(false);
-  // const [showPopup, setShowPopup] = useState(false);
-  // const [showQuestion, setShowQuestion] = useState(false);
   const [quizLink, setQuizLink] = useState("");
   const [editId, setEditId] = useState("");
-  // const [showDelete, setShowDelete] = useState(false);
+  const [quizDeleted,setQuizDeleted]=useState('')
+  const [deleteId,setDeleteId]=useState('')
 
   const initialPopup={
     showWrapper:false,
@@ -45,10 +45,6 @@ function Dashboard() {
     ],
   };
   const [quiz, setQuiz] = useState(initialQuiz);
-
-  useEffect(() => {
-    console.log(editId);
-  }, [editId]);
 
   useEffect(() => {
     console.log({
@@ -95,6 +91,32 @@ function Dashboard() {
       navigate("/");
     }
   };
+
+  const handleDelete=async()=>{
+
+    const jwttoken=JSON.parse(localStorage.getItem('token'))
+    try{
+      const response=await axios.delete(`${FRONTEND_URL}/quizzes/${deleteId}`,{
+        headers:{
+          "Content-Type":"application/json",
+          Authorization:`Bearer ${jwttoken}`
+        }
+      })
+      console.log(response)
+      toast.success('quiz deleted successfully')
+      setDeleteId('')
+      setQuizDeleted(response.data.deletedQuizId)
+      setPopups({...popups,showWrapper:false,showDelete:false})
+
+    }catch(error){
+      console.log(error)
+    }
+
+  }
+
+  const handleCancel=()=>{
+    setPopups(initialPopup)
+  }
 
   return (
     <>
@@ -146,6 +168,8 @@ function Dashboard() {
             setEditId={setEditId}
             popups={popups}
             setPopups={setPopups}
+            setDeleteId={setDeleteId}
+            quizDeleted={quizDeleted}
           />
         )}
       </div>
@@ -227,8 +251,14 @@ function Dashboard() {
             />
           ) : popups.showDelete ? (
             <div className={styles.delete_container}>
-
-
+            <div className={styles.heading}>
+            Are you confirm you want to delete ?
+            </div>
+            <div className={styles.button_box}>
+              <button className={styles.confirm_delete} onClick={handleDelete}>Confirm Delete</button>
+              <button className={styles.drop_btn} onClick={handleCancel}>Cancel</button>
+            </div>
+            
             </div>
           ) : (
             <div

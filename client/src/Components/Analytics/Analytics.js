@@ -8,7 +8,7 @@ import axios from 'axios'
 import { FRONTEND_URL } from "../../utils/utils";
 import moment from 'moment'
 
-function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups}) {
+function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,quizDeleted}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -29,15 +29,17 @@ function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups}) {
       }
     };
     fetchData();
-  }, [isLoggedIn,quizLink]);
+
+  }, [isLoggedIn,quizLink,quizDeleted]);
 
   const handleEdit=(id)=>{
     setEditId(id)
    setPopups({...popups,showWrapper:true,showQuestion:true})   
   }
 
-  const handleDelete=()=>{
+  const handleDelete=(id)=>{
     setPopups({...popups,showWrapper:true,showDelete:true})
+    setDeleteId(id)
   }
 
   return (
@@ -70,7 +72,7 @@ function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups}) {
                 <td>{quiz && quiz.impressions && quiz.impressions}</td>
                 <td className={styles.button_box}>
                   <img src={image1} alt="edit" className={styles.edit_quiz} onClick={()=>handleEdit(quiz._id)}/>
-                  <img src={image2} alt="delete" className={styles.delete_quiz} onClick={handleDelete}/>
+                  <img src={image2} alt="delete" className={styles.delete_quiz} onClick={()=>handleDelete(quiz._id)}/>
                   <img src={image3} alt="share" />
                 </td>
                 <td>
