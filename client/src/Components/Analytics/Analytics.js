@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import axios from 'axios'
 import { FRONTEND_URL } from "../../utils/utils";
 import moment from 'moment'
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import toast from "react-hot-toast";
 
 function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,quizDeleted}) {
   const [data, setData] = useState({});
@@ -42,6 +44,10 @@ function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,q
     setDeleteId(id)
   }
 
+  const handleLinkCopy=()=>{
+    toast.success('Link Copied to Clipboard')
+  }
+
   return (
     <div className={styles.analytics}>
       <div className={styles.analysis_box}>
@@ -73,7 +79,9 @@ function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,q
                 <td className={styles.button_box}>
                   <img src={image1} alt="edit" className={styles.edit_quiz} onClick={()=>handleEdit(quiz._id)}/>
                   <img src={image2} alt="delete" className={styles.delete_quiz} onClick={()=>handleDelete(quiz._id)}/>
-                  <img src={image3} alt="share" />
+                  <CopyToClipboard text={`http://localhost:3000/quiz/${quiz._id}`} onCopy={handleLinkCopy}>
+                  <img src={image3} alt="share" className={styles.share_quiz} />
+                  </CopyToClipboard>
                 </td>
                 <td>
                   <Link to={`/quizAnalysis/${quiz._id}`} className={styles.link_text}>

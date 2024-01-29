@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { UserContext } from "../../contexts/UserContext";
 import axios from 'axios'
 import { FRONTEND_URL } from "../../utils/utils";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -116,6 +117,11 @@ function Dashboard() {
 
   const handleCancel=()=>{
     setPopups(initialPopup)
+  }
+
+  const handleLinkCopy=()=>{
+    toast.success('Link Copied to Clipboard')
+    setPopups({...popups,showWrapper:false})
   }
 
   return (
@@ -269,7 +275,9 @@ function Dashboard() {
                 Congrats your Quiz is Published!
               </div>
               <div className={styles.shareable_link}>{quizLink}</div>
+              <CopyToClipboard text={quizLink} onCopy={handleLinkCopy}>
               <button className={styles.share_btn}>Share</button>
+              </CopyToClipboard>
             </div>
           )}
         </div>
