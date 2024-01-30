@@ -53,6 +53,11 @@ function Dashboard() {
     });
   }, [popups]);
 
+  useEffect(()=>{
+    console.log("edit id is ",editId)
+
+  },[editId])
+
   useEffect(() => {
     if (localStorage.getItem("clicked")) {
       setClicked(JSON.parse(localStorage.getItem("clicked")));
@@ -166,7 +171,7 @@ function Dashboard() {
           </div>
         </div>
         {clicked === 0 ? (
-          <DashboardInfo isLoggedIn={isLoggedIn} />
+          <DashboardInfo isLoggedIn={isLoggedIn} quizLink={quizLink}/>
         ) : (
           <Analytics
             isLoggedIn={isLoggedIn}

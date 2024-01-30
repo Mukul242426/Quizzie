@@ -11,6 +11,10 @@ const optionSchema = new mongoose.Schema({
     trim: true,
     default: "",
   },
+  count:{
+    type:Number,
+    default:0
+  }
 });
 
 const questionSchema = new mongoose.Schema({
@@ -35,6 +39,18 @@ const questionSchema = new mongoose.Schema({
     max: 3,
     default: -1,
   },
+  attempts:{
+    type:Number,
+    default:0
+  },
+  correctAttempts:{
+    type:Number,
+    default:0
+  },
+  incorrectAttempts:{
+    type:Number,
+    default:0
+  }
 });
 
 const quizSchema = new mongoose.Schema({

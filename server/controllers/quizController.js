@@ -111,3 +111,23 @@ export const deleteQuiz = async (req, res, next) => {
     next(AppError(error.message, 400));
   }
 };
+
+export const submitQuiz=async(req,res,next)=>{
+  const {id}=req.params;
+  console.log(id)
+
+  const {impressions,questions}=req.body;
+
+  try {
+    const quiz = await Quiz.findOneAndUpdate(
+      { _id: id},
+      { impressions, questions },
+    );
+    res.status(200).json({
+      success: true,
+      message: "Quiz Updated Successfully",
+    });
+  } catch (error) {
+    next(AppError(error.message, 400));
+  }
+}

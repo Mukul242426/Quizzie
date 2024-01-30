@@ -5,6 +5,7 @@ import {
   getAllQuizzes,
   getQuiz,
   deleteQuiz,
+  submitQuiz
 } from "../controllers/quizController.js";
 import {isAuthenticated} from '../middlewares/auth.js'
 
@@ -19,5 +20,9 @@ router
   .patch(isAuthenticated,updateQuiz)
   .get(getQuiz)
   .delete(isAuthenticated,deleteQuiz);
+
+router
+  .route("/submit/:id")
+  .patch(submitQuiz)  
 
 export default router;

@@ -212,7 +212,9 @@ function QuizQuestion({
       );
       console.log(response);
       toast.success("Quiz edited successfully");
+      setQuiz(initialQuiz)
       setPopups(initialPopup);
+      setEditId('')
     } catch (error) {
       console.log(error);
     }
@@ -240,6 +242,7 @@ function QuizQuestion({
       });
       console.log(response.data);
       setQuizLink(`http://localhost:3000/quiz/${response.data.quizId}`);
+      setQuiz(initialQuiz)
       setPopups({ ...popups, showQuestion: false });
     } catch (error) {
       console.log(error);
@@ -415,7 +418,7 @@ function QuizQuestion({
               {index + 1 ===
                 quiz.questions[currentQuestionIndex].options.length &&
                 quiz.questions[currentQuestionIndex].options.length < 4 && (
-                  <div className={styles.second_btn}>
+                  <div className={styles.second_btn} style={{paddingLeft:quiz.quizType==='Q/A'?'1.9rem':'0rem'}}>
                     <button className={styles.add_option} onClick={addOption}>
                       Add Option
                     </button>

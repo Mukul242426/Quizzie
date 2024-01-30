@@ -30,3 +30,63 @@
   width: 70%;
   height: 100%;
 }
+
+.score_msg {
+  color: #474444;
+  font-family: "Poppins";
+  font-size: 1.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.marks {
+  color: #60b84b;
+  font-family: "Poppins";
+  font-size: 1.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.poll{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.msg{
+  text-align: center;
+  color: #474444;
+  font-family: "Poppins";
+  font-size: 1.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+
+@media only screen and (min-width:768px){
+  .outer_box,.poll{
+    width: 100%;
+    height: 100vh;
+    padding: 3rem;
+    background-color: black;
+  }
+
+  .completed,.msg{
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.75rem;
+  }
+
+  .msg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+}
