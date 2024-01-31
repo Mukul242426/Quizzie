@@ -25,7 +25,6 @@ function Login() {
       )
       .required("Email is required"),
     password: Yup.string()
-      .min(8, "Weak Password")
       .required("Password is required"),
   });
 

@@ -10,7 +10,7 @@ import moment from 'moment'
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import toast from "react-hot-toast";
 
-function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,quizDeleted}) {
+function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,quizDeleted,setQuizId, setIsQuesAnalysis}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -84,7 +84,11 @@ function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,q
                   </CopyToClipboard>
                 </td>
                 <td>
-                  <Link to={`/quizAnalysis/${quiz._id}`} className={styles.link_text}>
+                  <Link onClick={() => {
+                    console.log("quiz?.id: ", quiz._id)
+                    setQuizId(quiz?._id)
+                    setIsQuesAnalysis(true)
+                    }}  className={styles.link_text}>
                     Question Wise Analysis
                   </Link>
                 </td>

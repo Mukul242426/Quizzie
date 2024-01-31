@@ -10,6 +10,8 @@ import { UserContext } from "../../contexts/UserContext";
 import axios from 'axios'
 import { FRONTEND_URL } from "../../utils/utils";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import QuestionAnalysis from "../QuestionAnalysis/QuestionAnalysis";
+
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ function Dashboard() {
   const [editId, setEditId] = useState("");
   const [quizDeleted,setQuizDeleted]=useState('')
   const [deleteId,setDeleteId]=useState('')
+  const [quizId, setQuizId] = useState(null);
+  const [isQuesAnalysis, setIsQuesAnalysis] = useState(false);
 
   const initialPopup={
     showWrapper:false,
@@ -93,6 +97,8 @@ function Dashboard() {
       localStorage.removeItem("token");
       localStorage.removeItem('clicked')
       setIsLoggedIn(false);
+      setQuizId(null)
+      setIsQuesAnalysis(false)
       toast.success("Logged Out Successfully");
     } else {
       navigate("/");
@@ -143,6 +149,7 @@ function Dashboard() {
                 }`}
                 key={index}
                 onClick={() => {
+                  setIsQuesAnalysis(false);
                   if (index !== 2) {
                     setClicked(index);
                   } else {
@@ -171,7 +178,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
-        {clicked === 0 ? (
+        {isQuesAnalysis === true ? <QuestionAnalysis quizId={quizId} /> : clicked === 0 ? (
           <DashboardInfo isLoggedIn={isLoggedIn} quizLink={quizLink}/>
         ) : (
           <Analytics
@@ -182,6 +189,8 @@ function Dashboard() {
             setPopups={setPopups}
             setDeleteId={setDeleteId}
             quizDeleted={quizDeleted}
+            setQuizId={setQuizId}
+            setIsQuesAnalysis={setIsQuesAnalysis}
           />
         )}
       </div>
