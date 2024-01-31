@@ -79,7 +79,7 @@ function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,q
                 <td className={styles.button_box}>
                   <img src={image1} alt="edit" className={styles.edit_quiz} onClick={()=>handleEdit(quiz._id)}/>
                   <img src={image2} alt="delete" className={styles.delete_quiz} onClick={()=>handleDelete(quiz._id)}/>
-                  <CopyToClipboard text={`http://localhost:3000/quiz/${quiz._id}`} onCopy={handleLinkCopy}>
+                  <CopyToClipboard text={`${window.location.origin}/quiz/${quiz._id}`} onCopy={handleLinkCopy}>
                   <img src={image3} alt="share" className={styles.share_quiz} />
                   </CopyToClipboard>
                 </td>
