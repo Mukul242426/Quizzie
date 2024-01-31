@@ -12,7 +12,7 @@ function Quiz() {
   const [data, setData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [timer, setTimer] = useState(null);
+  // const [timer, setTimer] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,11 +20,8 @@ function Quiz() {
         const response = await axios.get(`${FRONTEND_URL}/quizzes/${id}`);
         console.log(response);
         setData(response.data.quiz);
-        const timerValue = parseInt(response.data.quiz.timer);
-        if (!isNaN(timerValue)) {
-          setTimer(timerValue);
-        } else {
-          setTimer(null);
+        if(response.data.quiz.timer){
+
         }
       } catch (error) {
         console.log(error);
@@ -61,7 +58,7 @@ function Quiz() {
   const handleNext = () => {
     setCurrentQuestionIndex(currentQuestionIndex + 1);
     if (data.quiz && !isNaN(parseInt(data.quiz.timer))) {
-      setTimer(parseInt(data.quiz.timer));
+      // setTimer(parseInt(data.quiz.timer));
     }
   };
 
@@ -104,7 +101,7 @@ function Quiz() {
             ...question,
             options:question.options.map((option,optionIndex)=>({
               ...option,
-              count:selectedOptions[optionIndex]===optionIndex?question.count+1:question.count
+              count:selectedOptions[questionIndex]===optionIndex?option.count+1:option.count
             }))
           }))
         })
@@ -114,9 +111,11 @@ function Quiz() {
 
   useEffect(() => {
     if (submitted) {
+      console.log(data)
+
      const updateUserRespone=async()=>{
       try{
-       const response= await axios.patch(`${FRONTEND_URL}/quizzes/submit/${id}`,{questions:data})
+       const response= await axios.patch(`${FRONTEND_URL}/quizzes/submit/${id}`,data)
        console.log(response)
 
       }catch(error){
@@ -125,7 +124,7 @@ function Quiz() {
 
      }
      updateUserRespone()
-    }
+     }
   }, [submitted]);
 
   // useEffect(() => {
@@ -143,21 +142,21 @@ function Quiz() {
 
   // }, [timer]);
 
-  useEffect(() => {
-    const timerId = setInterval(() => {
-      setTimer(prevTimer => {
-        if (prevTimer === 0) {
-          handleSubmit();
-          clearInterval(timerId);
-          return 0;
-        } else {
-          return prevTimer - 1;
-        }
-      });
-    }, 1000);
+  // // useEffect(() => {
+  // //   const timerId = setInterval(() => {
+  // //     setTimer(prevTimer => {
+  // //       if (prevTimer === 0) {
+  // //         handleSubmit();
+  // //         clearInterval(timerId);
+  // //         return 0;
+  // //       } else {
+  // //         return prevTimer - 1;
+  // //       }
+  // //     });
+  // //   }, 1000);
   
-    return () => clearInterval(timerId);
-  }, [timer]);
+  //   return () => clearInterval(timerId);
+  // }, [timer]);
   
 
   const handleClick = (index) => {
@@ -182,7 +181,7 @@ function Quiz() {
                 }/0${data && data.questions && data.questions.length}`}</div>
                 {data && data.quizType === "Q/A" && data.timer !== "OFF" && (
                   <div className={styles.timer}>
-                    {`00:${timer < 10 ? `0${timer}` : `${timer}`}`}
+                    {/* {`00:${timer < 10 ? `0${timer}` : `${timer}`}`} */}
                   </div>
                 )}
               </div>

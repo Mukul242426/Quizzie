@@ -28,6 +28,11 @@ function QuizQuestion({
     console.log(quiz);
   }, [quiz]);
 
+  // useEffect(()=>{
+  //   console.log("edit id is ",editId)
+
+  // },[editId])
+
   useEffect(() => {
     const getQuizData = async () => {
       try {

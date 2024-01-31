@@ -53,10 +53,10 @@ function Dashboard() {
     });
   }, [popups]);
 
-  useEffect(()=>{
-    console.log("edit id is ",editId)
+  // useEffect(()=>{
+  //   console.log("edit id is ",editId)
 
-  },[editId])
+  // },[editId])
 
   useEffect(() => {
     if (localStorage.getItem("clicked")) {

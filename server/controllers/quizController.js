@@ -116,7 +116,10 @@ export const submitQuiz=async(req,res,next)=>{
   const {id}=req.params;
   console.log(id)
 
+  // console.log(req.body)
+
   const {impressions,questions}=req.body;
+  console.log(questions)
 
   try {
     const quiz = await Quiz.findOneAndUpdate(
