@@ -5,24 +5,29 @@ import {
   getAllQuizzes,
   getQuiz,
   deleteQuiz,
-  submitQuiz
+  submitQuiz,
+  updateImpressions,
 } from "../controllers/quizController.js";
-import {isAuthenticated} from '../middlewares/auth.js'
+import { isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
 router
   .route("/")
-  .post(isAuthenticated,createQuiz)
-  .get(isAuthenticated,getAllQuizzes);
+  .post(isAuthenticated, createQuiz)
+  .get(isAuthenticated, getAllQuizzes);
 router
   .route("/:id")
-  .patch(isAuthenticated,updateQuiz)
+  .patch(isAuthenticated, updateQuiz)
   .get(getQuiz)
-  .delete(isAuthenticated,deleteQuiz);
+  .delete(isAuthenticated, deleteQuiz);
+
+router
+  .route("/impressions/:id")
+  .patch(updateImpressions);
 
 router
   .route("/submit/:id")
-  .patch(submitQuiz)  
+  .patch(submitQuiz);
 
 export default router;

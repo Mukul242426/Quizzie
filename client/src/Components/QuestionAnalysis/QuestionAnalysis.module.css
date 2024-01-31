@@ -1,0 +1,115 @@
+.question_analysis_container {
+    width: 85%;
+    height: 100%;
+    background-color: #EDEDED;
+    padding: 3rem 8rem;
+    overflow: auto;
+    font-family: 'Poppins';
+  }
+  
+  .quiz_header_container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .quizTitle {
+    color: #5076FF;
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: normal;
+  }
+  
+  .quizDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+  }
+  
+  .quizSpan {
+    color: #FF5D01;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: normal;
+  }
+  
+  .questions_body {
+    margin-top: 1.5rem;
+  }
+  
+  .question_body {
+    border-bottom: 2px solid #D7D7D7;
+    padding-bottom: 2rem;
+  }
+  
+  .question_title {
+    margin-top: 2rem;
+    color: #000;
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: normal;
+  }
+  
+  /************* for Q/A **************/
+  .qa_data_container {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .qa_data_box {
+    width: 30%;
+    padding: 0.7rem 0.5rem;
+    color: #474444;
+    background: #fff;
+    border-radius: 0.3125rem;
+    text-align: center;
+  }
+  
+  .qa_number {
+    font-size: 1.875rem;
+    font-weight: 600;
+    line-height: normal;
+  }
+  
+  .qa_description {
+    color: #474444;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: normal;
+  }
+  
+  /************** for Poll **************/
+  .poll_data_container {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .poll_data_box {
+    width: 20%;
+    padding: 2rem 1rem;
+    color: #474444;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border-radius: 0.3125rem;
+  }
+  
+  .poll_number {
+    font-size: 1.875rem;
+    font-weight: 900;
+    line-height: normal;
+  }
+  
+  .poll_description {
+    color: #474444;
+    font-size: 0.875rem;
+    font-weight: 900;
+    line-height: normal;
+  }
+  

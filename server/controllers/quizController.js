@@ -5,17 +5,17 @@ export const createQuiz = async (req, res, next) => {
   const { name, quizType, timer, questions } = req.body;
 
   try {
-   const quiz=await Quiz.create({
+    const quiz = await Quiz.create({
       userId: req.user._id,
       name,
       quizType,
       timer,
-      questions
+      questions,
     });
     res.status(200).json({
       success: true,
       message: "quiz created successfully",
-      quizId:quiz._id
+      quizId: quiz._id,
     });
   } catch (error) {
     next(AppError(error.message, 400));
@@ -51,10 +51,11 @@ export const getAllQuizzes = async (req, res, next) => {
   try {
     let quizzes;
 
-    if(sort){
-      quizzes=await Quiz.find({userId:req.user._id}).sort({impressions:-1})
-    }
-    else{
+    if (sort) {
+      quizzes = await Quiz.find({ userId: req.user._id }).sort({
+        impressions: -1,
+      });
+    } else {
       quizzes = await Quiz.find({ userId: req.user._id });
     }
 
@@ -105,32 +106,57 @@ export const deleteQuiz = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "quiz deleted successfully",
-      deletedQuizId:quiz._id
+      deletedQuizId: quiz._id,
     });
   } catch (error) {
     next(AppError(error.message, 400));
   }
 };
 
-export const submitQuiz=async(req,res,next)=>{
-  const {id}=req.params;
-  console.log(id)
-
-  // console.log(req.body)
-
-  const {impressions,questions}=req.body;
-  console.log(questions)
+export const updateImpressions=async(req,res,next)=>{
+  const { id } = req.params;
+  
+  const {impressions} = req.body;
+  console.log(impressions);
 
   try {
-    const quiz = await Quiz.findOneAndUpdate(
-      { _id: id},
-      { impressions, questions },
-    );
-    res.status(200).json({
-      success: true,
-      message: "Quiz Updated Successfully",
-    });
+      const quiz = await Quiz.findOneAndUpdate(
+        { _id: id },
+        { impressions },
+        { new: true }
+      );
+      console.log(quiz);
+      return res.status(200).json({
+        success: true,
+        message: "Impressions Updated Successfully",
+      });
+    
   } catch (error) {
     next(AppError(error.message, 400));
   }
-}
+};
+
+
+
+export const submitQuiz = async (req, res, next) => {
+  const { id } = req.params;
+  
+  const {questions} = req.body;
+  console.log(questions);
+
+  try {
+      const quiz = await Quiz.findOneAndUpdate(
+        { _id: id },
+        { questions },
+        { new: true }
+      );
+      console.log(quiz);
+      return res.status(200).json({
+        success: true,
+        message: "Quiz Submitted Successfully",
+      });
+    
+  } catch (error) {
+    next(AppError(error.message, 400));
+  }
+};

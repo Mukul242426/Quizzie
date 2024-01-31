@@ -91,6 +91,7 @@ function Dashboard() {
   const handleClick = () => {
     if (isLoggedIn) {
       localStorage.removeItem("token");
+      localStorage.removeItem('clicked')
       setIsLoggedIn(false);
       toast.success("Logged Out Successfully");
     } else {
