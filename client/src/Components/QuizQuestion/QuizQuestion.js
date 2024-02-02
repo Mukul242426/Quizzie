@@ -246,7 +246,7 @@ function QuizQuestion({
         },
       });
       console.log(response.data);
-      setQuizLink(`http://localhost:3000/quiz/${response.data.quizId}`);
+      setQuizLink(`${window.location.origin}/quiz/${response.data.quizId}`);
       setQuiz(initialQuiz)
       setPopups({ ...popups, showQuestion: false });
     } catch (error) {
