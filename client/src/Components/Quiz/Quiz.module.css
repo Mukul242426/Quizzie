@@ -146,6 +146,7 @@
 }
 .change_outline{
   outline:2px solid #5076FF;
+  border-radius: 0.75rem;
 }
 
 @media only screen and (min-width: 768px) {
