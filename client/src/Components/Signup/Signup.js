@@ -50,7 +50,7 @@ function Signup() {
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
-      toast(error.response.data.error.message);
+      toast.error(error.response.data.error.message);
     }
   };
 
