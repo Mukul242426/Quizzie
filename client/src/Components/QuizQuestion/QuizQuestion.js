@@ -246,7 +246,7 @@ function QuizQuestion({
         },
       });
       console.log(response.data);
-      setQuizLink(`${window.location.origin}/quiz/${response.data.quizId}`);
+      setQuizLink(`${window.location.origin}/quiz/${response.data.quizId}`); // updated this line as it was not working well on deployment
       setQuiz(initialQuiz)
       setPopups({ ...popups, showQuestion: false });
     } catch (error) {
