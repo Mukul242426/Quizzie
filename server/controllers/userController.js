@@ -52,7 +52,7 @@ export const login = async (req, res, next) => {
   }
 
   try {
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
     if (!user) {
       return next(AppError("Invalid email or password", 400));
     }
