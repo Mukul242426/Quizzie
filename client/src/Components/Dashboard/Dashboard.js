@@ -24,6 +24,13 @@ function Dashboard() {
   const [quizId, setQuizId] = useState(null);
   const [isQuesAnalysis, setIsQuesAnalysis] = useState(false);
 
+
+  useEffect(()=>{
+    if(!isLoggedIn){
+      navigate('/')
+    }
+  },[])
+
   const initialPopup={
     showWrapper:false,
     showPopup:false,
