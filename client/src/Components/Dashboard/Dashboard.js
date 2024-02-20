@@ -25,11 +25,11 @@ function Dashboard() {
   const [isQuesAnalysis, setIsQuesAnalysis] = useState(false);
 
 
-  useEffect(()=>{
-    if(!isLoggedIn){
-      navigate('/')
-    }
-  },[])
+  // useEffect(()=>{
+  //   if(!isLoggedIn){
+  //     navigate('/')
+  //   }
+  // },[])
 
   const initialPopup={
     showWrapper:false,
