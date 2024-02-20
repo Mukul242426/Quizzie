@@ -31,8 +31,7 @@ export const signup = async (req, res, next) => {
       password: protectedPassword,
       confirmPassword: protectedPassword
     });
-    user=user.toJSON();
-    const jwtToken = jwt.sign(user._id, process.env.SECRET_KEY);
+    const jwtToken = jwt.sign(user.toJSON(), process.env.SECRET_KEY);
 
     res.status(200).json({
       success: true,
@@ -52,7 +51,7 @@ export const login = async (req, res, next) => {
   }
 
   try {
-    let user = await User.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) {
       return next(AppError("Invalid email or password", 400));
     }
@@ -60,8 +59,7 @@ export const login = async (req, res, next) => {
     if (!isMatched) {
       return next(AppError("Invalid email or password", 400));
     }
-    user=user.toJSON();
-    const jwtToken = jwt.sign(user._id, process.env.SECRET_KEY);
+    const jwtToken = jwt.sign(user.toJSON(), process.env.SECRET_KEY);
     res.status(200).json({
       success: true,
       message: "Login Successfull",
