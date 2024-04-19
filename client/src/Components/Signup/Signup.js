@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState} from "react";
 import styles from "./Signup.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -11,6 +11,7 @@ import { UserContext } from "../../contexts/UserContext";
 function Signup() {
   const navigate = useNavigate();
   const {setIsLoggedIn}=useContext(UserContext);
+  const [isLoading,setIsLoading]=useState(false);
 
   const initialValues = {
     name: "",
@@ -43,6 +44,7 @@ function Signup() {
 
   const handleSignup = async (values) => {
     try {
+      setIsLoading(true)
       const response = await axios.post(`${FRONTEND_URL}/signup`, values);
       localStorage.setItem("token", JSON.stringify(response.data.jwtToken));
       toast.success(response.data.message);
@@ -51,6 +53,8 @@ function Signup() {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.error.message);
+    } finally{
+      setIsLoading(false);
     }
   };
 
@@ -121,7 +125,7 @@ function Signup() {
 
         <div className={styles.btn_box}>
           <button className={styles.signup_btn} type="submit">
-            Signup
+            {isLoading? 'Loading...' : 'Signup'}
           </button>
         </div>
       </Form>

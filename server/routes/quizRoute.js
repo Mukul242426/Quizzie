@@ -14,7 +14,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .post(isAuthenticated, createQuiz)
+  .post(isAuthenticated,createQuiz)
   .get(isAuthenticated, getAllQuizzes);
 router
   .route("/:id")

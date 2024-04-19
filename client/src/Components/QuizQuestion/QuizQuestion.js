@@ -222,6 +222,7 @@ function QuizQuestion({
       setEditId('')
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.error.message)
     }
   };
 
@@ -251,6 +252,7 @@ function QuizQuestion({
       setPopups({ ...popups, showQuestion: false });
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.error.message)
     }
   };
 

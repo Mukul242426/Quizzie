@@ -10,7 +10,7 @@ import moment from 'moment'
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import toast from "react-hot-toast";
 
-function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,quizDeleted,setQuizId, setIsQuesAnalysis}) {
+function Analytics({isLoggedIn,setIsLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,quizDeleted,setQuizId, setIsQuesAnalysis}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -28,6 +28,9 @@ function Analytics({isLoggedIn,quizLink,setEditId,popups,setPopups,setDeleteId,q
       } catch (error) {
         setData({});
         console.log(error);
+        setIsLoggedIn(false);
+        localStorage.removeItem('token');
+        toast.error(error.response.data.error.message)
       }
     };
     fetchData();

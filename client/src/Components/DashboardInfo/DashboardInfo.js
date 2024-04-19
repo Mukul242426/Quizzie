@@ -4,8 +4,9 @@ import image1 from "../../assets/eye.png";
 import axios from "axios";
 import { FRONTEND_URL } from "../../utils/utils";
 import moment from "moment";
+import toast from "react-hot-toast";
 
-function DashboardInfo({ isLoggedIn, quizLink }) {
+function DashboardInfo({ isLoggedIn,setIsLoggedIn,quizLink }) {
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -22,7 +23,9 @@ function DashboardInfo({ isLoggedIn, quizLink }) {
         setData(response.data);
       } catch (error) {
         setData({});
-        // console.log(error);
+        setIsLoggedIn(false);
+        localStorage.removeItem('token');
+        toast.error(error.response.data.error.message)
       }
     };
     fetchData();

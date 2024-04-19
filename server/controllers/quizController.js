@@ -74,6 +74,7 @@ export const getAllQuizzes = async (req, res, next) => {
       quizzes,
     });
   } catch (error) {
+    console.log(error)
     next(AppError(error.message, 400));
   }
 };

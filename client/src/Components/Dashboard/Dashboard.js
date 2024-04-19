@@ -24,12 +24,14 @@ function Dashboard() {
   const [quizId, setQuizId] = useState(null);
   const [isQuesAnalysis, setIsQuesAnalysis] = useState(false);
 
-
-  // useEffect(()=>{
-  //   if(!isLoggedIn){
-  //     navigate('/')
-  //   }
-  // },[])
+  useEffect(()=>{
+   if(JSON.parse(localStorage.getItem('token'))){
+    setIsLoggedIn(true)
+   }
+   else{
+    navigate('/')
+   }
+  },[isLoggedIn])
 
   const initialPopup={
     showWrapper:false,
@@ -130,6 +132,7 @@ function Dashboard() {
 
     }catch(error){
       console.log(error)
+      toast.error(error.response.data.error.message)
     }
 
   }
@@ -145,7 +148,8 @@ function Dashboard() {
 
   return (
     <>
-      <div className={styles.dashboard}>
+    
+     {isLoggedIn ? <div className={styles.dashboard}>
         <div className={styles.left_area}>
           <div className={styles.box_1}>QUIZZIE</div>
           <div className={styles.box_2}>
@@ -186,10 +190,11 @@ function Dashboard() {
           </div>
         </div>
         {isQuesAnalysis === true ? <QuestionAnalysis quizId={quizId} /> : clicked === 0 ? (
-          <DashboardInfo isLoggedIn={isLoggedIn} quizLink={quizLink}/>
+          <DashboardInfo isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} quizLink={quizLink}/>
         ) : (
           <Analytics
             isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
             quizLink={quizLink}
             setEditId={setEditId}
             popups={popups}
@@ -200,7 +205,7 @@ function Dashboard() {
             setIsQuesAnalysis={setIsQuesAnalysis}
           />
         )}
-      </div>
+      </div>:null}
       {popups.showWrapper && (
         <div
           className={styles.wrapper}
